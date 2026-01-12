@@ -444,7 +444,7 @@ AI tools commonly used in professional settings include:
   - AI Tool Used: ChatGPT, Gemini, Cursor
   - Process:
     - Provided the detailed description of the cyber security issue
-    - Asked AI to generate the the document
+    - Asked AI to generate the document
     - Wrote actual content myself, using AI outline as a guide
     - Used AI to review grammar and clarity of my written content
 
