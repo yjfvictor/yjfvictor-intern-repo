@@ -96,7 +96,8 @@ Ethical considerations are crucial when designing for or working with neurodiver
    - Be transparent about how user data is collected and used
    - Provide clear consent mechanisms that are easy to understand
    - Protect sensitive information about users' disabilities or needs
-   - Comply with privacy regulations (e.g., Australian Privacy Principles)
+   - Comply with privacy regulations including Australian Privacy Principles (APPs) and the General Data Protection Regulation (GDPR)
+   - Note: Health and disability information may constitute special category personal data under GDPR Article 9, requiring enhanced protections and explicit consent or other lawful basis
 
 ### How can you **make interactions and content more accessible** for people with ADHD or Autism?
 
@@ -543,7 +544,14 @@ Focus Bear Support
 ### Australian Resources
 
 - [Australian Privacy Principles (APPs)](https://www.oaic.gov.au/privacy/australian-privacy-principles) - Privacy considerations for vulnerable populations
-- [Disability Discrimination Act 1992](https://www.legislation.gov.au/Details/C2016C00763) - Legal framework for accessibility
+- [Disability Discrimination Act 1992](https://www.legislation.gov.au/Details/C2024C00573) - Legal framework for accessibility
+
+### GDPR Resources
+
+- [General Data Protection Regulation (GDPR)](https://gdpr.eu/) - EU data protection regulation
+- [GDPR Article 9 - Processing of Special Categories of Personal Data](https://gdpr-info.eu/art-9-gdpr/) - Enhanced protections for health and disability data
+- [ICO Guidance on Vulnerable Individuals in DPIAs](https://ico.org.uk/for-organisations/uk-gdpr-guidance-and-resources/accountability-and-governance/data-protection-impact-assessments-dpias/when-do-we-need-to-do-a-dpia/) - ICO guidance on protecting vulnerable individuals under GDPR
+- [GDPR Consent Requirements](https://gdpr.eu/gdpr-consent-requirements/) - Requirements for valid consent, especially important for vulnerable populations
 
 ---
 
