@@ -85,7 +85,7 @@ AI tools commonly used in professional settings include:
    - **Personal Information Exposure**: Inputting personal identifiable information (PII) into AI tools can lead to data breaches and privacy violations
    - **Confidential Data Leakage**: Company secrets, proprietary information, or client data may be stored, processed, or used to train AI models
    - **Third-Party Data Handling**: AI providers may store, analyse, or use your inputs in ways you cannot control
-   - **Compliance Violations**: Breaches of Australian Privacy Principles (APPs) and Victorian Privacy and Data Protection Act 2014
+   - **Compliance Violations**: Breaches of Australian Privacy Principles (APPs), Victorian Privacy and Data Protection Act 2014, and the General Data Protection Regulation (GDPR)
 
 2. **Bias and Discrimination**
    - AI systems may perpetuate existing biases from training data
@@ -150,6 +150,7 @@ AI tools commonly used in professional settings include:
    - Information protected under Privacy Act 1988 (Cth)
    - Data subject to Australian Privacy Principles (APPs)
    - Information covered by Victorian Privacy and Data Protection Act 2014
+   - Personal data protected under the General Data Protection Regulation (GDPR)
    - Health information (Privacy Act 1988)
    - Financial information subject to regulations
 
@@ -401,8 +402,9 @@ AI tools commonly used in professional settings include:
 
 7. **Understand Cross-Border Data Flows**
    - Be aware when data is sent to servers overseas
-   - Understand implications under APP 8 (Cross-Border Disclosure)
+   - Understand implications under APP 8 (Cross-Border Disclosure) and GDPR Article 44-50 (Transfers of personal data to third countries)
    - Prefer tools with Australian data centres when available
+   - Ensure adequate safeguards (e.g., Standard Contractual Clauses, adequacy decisions) for GDPR-covered data transfers
    - Consult with legal/compliance team for cross-border data issues
 
 8. **Implement Data Governance**
@@ -419,7 +421,8 @@ AI tools commonly used in professional settings include:
 
 10. **Incident Response**
     - Know how to report potential privacy breaches
-    - Understand NDB (Notifiable Data Breaches) requirements
+    - Understand NDB (Notifiable Data Breaches) requirements under Privacy Act 1988
+    - Understand GDPR data breach notification requirements (Article 33-34: notify supervisory authority within 72 hours, notify data subjects without undue delay if high risk)
     - Have a plan for responding to data privacy incidents
     - Document and learn from any incidents
 
@@ -476,8 +479,14 @@ AI tools commonly used in professional settings include:
 - [Victorian Privacy and Data Protection Act 2014](https://www.legislation.vic.gov.au/in-force/acts/privacy-and-data-protection-act-2014/032) - Victorian privacy legislation
 - [Australian Cyber Security Centre (ACSC)](https://www.cyber.gov.au/) - Cyber security guidance (relevant for AI tool security)
 
+### GDPR Resources
+- [General Data Protection Regulation (GDPR)](https://gdpr.eu/) - EU data protection regulation
+- [GDPR.eu - Complete Guide to GDPR Compliance](https://gdpr.eu/what-is-gdpr/) - Comprehensive GDPR guidance
+- [ICO Guide to GDPR](https://ico.org.uk/for-organisations/uk-gdpr-guidance-and-resources/) - UK Information Commissioner's Office GDPR guidance
+- [GDPR Artical 33 Notification of a personal data breach to the supervisory authority](https://gdpr-info.eu/art-33-gdpr/) - GDPR requirements for reporting personal data breaches
+
 ### AI Ethics & Best Practices
-- [Australian Government AI Ethics Framework](https://www.industry.gov.au/publications/australias-artificial-intelligence-ethics-framework) - AI ethics principles
+- [Australia’s AI Ethics Principles](https://www.industry.gov.au/publications/australias-ai-ethics-principles) - AI ethics principles
 - [CSIRO - Responsible AI](https://www.csiro.au/en/research/technology-space/ai/responsible-ai) - Research and guidance on responsible AI
 
 ### Company Resources
@@ -489,4 +498,4 @@ AI tools commonly used in professional settings include:
 ---
 
 ## 📅 Last Updated
-Date: 12 January 2026
+Date: 14 January 2026

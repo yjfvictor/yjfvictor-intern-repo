@@ -170,6 +170,12 @@ The ACSC's **Essential Eight** mitigation strategies (also adopted by the Victor
   - The Office of the Australian Information Commissioner (OAIC)
   - Affected individuals (if the breach is likely to result in serious harm)
 
+**GDPR Requirements:**
+- **Data Breach Notification**: Under the General Data Protection Regulation (GDPR), personal data breaches must be reported to:
+  - The relevant supervisory authority within 72 hours of becoming aware (Article 33)
+  - Affected data subjects without undue delay if the breach is likely to result in a high risk to their rights and freedoms (Article 34)
+- **Security of Processing**: GDPR Article 32 requires appropriate technical and organisational measures to ensure security of personal data, including encryption, confidentiality, integrity, availability, and resilience
+
 **Victorian Requirements:**
 - Victorian Government Cyber Incident Response Service (if applicable)
 - Follow Victorian Government cyber security guidelines and incident management procedures
@@ -285,6 +291,7 @@ To make secure behaviour a habit:
    - **Report to ACSC**: Report cyber incidents to the Australian Cyber Security Centre (ACSC) at [cyber.gov.au](https://www.cyber.gov.au/) or via phone 1300 CYBER1 (1300 292 371)
    - **If Financial**: Contact your bank or credit card company immediately
    - **If Personal Data Exposed (Notifiable Data Breach)**: Notify the Office of the Australian Information Commissioner (OAIC) if an eligible data breach has occurred under the Privacy Act 1988 (Notifiable Data Breaches scheme)
+   - **If GDPR-Covered Data Exposed**: Notify the relevant GDPR supervisory authority within 72 hours, and notify affected data subjects without undue delay if high risk (GDPR Articles 33-34)
    - **Victorian Government**: If required, report to Victorian Government Cyber Incident Response Service
 
 5. **Contain the Breach**
@@ -406,6 +413,11 @@ Every Monday morning, I will perform a 5-minute security check-in routine before
 - [Office of the Australian Information Commissioner (OAIC)](https://www.oaic.gov.au/) - Privacy and data breach notification requirements
 - [Notifiable Data Breaches Scheme](https://www.oaic.gov.au/privacy/notifiable-data-breaches) - Data breach notification requirements
 
+### GDPR Cyber Security Resources
+- [GDPR Article 32 - Security of Processing](https://gdpr-info.eu/art-32-gdpr/) - GDPR requirements for technical and organisational security measures
+- [GDPR Artical 33 Notification of a personal data breach to the supervisory authority](https://gdpr-info.eu/art-33-gdpr/) - GDPR requirements for reporting personal data breaches
+- [ICO Guide to GDPR Security](https://ico.org.uk/for-organisations/guide-to-data-protection/guide-to-the-general-data-protection-regulation-gdpr/security/) - UK ICO guidance on GDPR security requirements
+
 ### International Security Resources
 - [NIST Cybersecurity Framework](https://www.nist.gov/cyberframework) - International cybersecurity standards
 - [OWASP Top 10](https://owasp.org/www-project-top-ten/) - Common web application security risks
@@ -418,5 +430,5 @@ Every Monday morning, I will perform a 5-minute security check-in routine before
 ---
 
 ## 📅 Last Updated
-Date: 11 January 2026
+Date: 14 January 2026
 Review Schedule: Quarterly security habit review and assessment
