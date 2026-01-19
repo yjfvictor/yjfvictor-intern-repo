@@ -538,6 +538,20 @@ function isValidUserCredentials(username, password) {
 
 ---
 
+### 🌐 Real-World Example: Clean Code Repository
+
+For a comprehensive real-world example demonstrating clean code principles, including excellent variable and function naming practices, refer to the [clean_code_test_repo](https://github.com/yjfvictor/clean_code_test_repo) repository. This repository showcases:
+
+- **Descriptive function names** that clearly communicate intent
+- **Meaningful variable names** that enhance code readability
+- **Consistent naming conventions** throughout the codebase
+- **Refactored examples** showing the transformation from messy to clean code
+- **Practical implementations** of the naming best practices discussed in this document
+
+Exploring this repository will provide additional context and help reinforce the naming principles outlined above through real, working code examples.
+
+---
+
 ### 💭 Reflections
 
 #### What Makes a Good Variable or Function Name?
