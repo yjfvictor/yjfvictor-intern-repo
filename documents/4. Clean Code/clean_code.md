@@ -643,6 +643,414 @@ The refactoring demonstrated several key improvements:
 
 ---
 
+## 🔧 Writing Small, Focused Functions
+
+### 🎯 About Small Functions
+
+Small, focused functions are the building blocks of clean, maintainable code. The Single Responsibility Principle (SRP) states that a function should do one thing, and do it well. Breaking down complex logic into smaller, well-named functions dramatically improves code readability, testability, and maintainability.
+
+---
+
+### 📚 Best Practices for Writing Small, Single-Purpose Functions
+
+#### Core Principles
+
+**Do:**
+
+- Write functions that do one thing and do it well
+- Keep functions short (ideally under 20-30 lines, but readability is more important than strict line counts)
+- Use descriptive function names that explain what the function does
+- Extract complex logic into separate functions
+- Make functions reusable by focusing on a single responsibility
+- Use function composition to build complex behaviour from simple functions
+- Return early to reduce nesting and improve readability
+
+**Don't:**
+
+- Mix multiple levels of abstraction in a single function
+- Use long parameter lists (consider using objects or breaking the function down further)
+- Include side effects alongside transformations (separate concerns)
+- Nest code deeply (extract nested logic into separate functions)
+- Use comments to explain what a function does (if needed, the function name should change)
+
+#### Function Size Guidelines
+
+While there's no hard rule, consider these guidelines:
+
+- **Small (1-10 lines):** Ideal for simple operations, transformations, and predicates
+- **Medium (11-30 lines):** Acceptable for moderately complex operations
+- **Large (31-50 lines):** Should be reviewed for extraction opportunities
+- **Very Large (50+ lines):** Almost always benefits from refactoring
+
+**Remember:** The goal isn't to hit a specific line count, but to create functions that are easy to understand, test, and modify.
+
+#### Benefits of Small Functions
+
+1. **Easier to understand:** Each function has a clear, single purpose
+2. **Easier to test:** Small functions are simpler to test in isolation
+3. **Easier to debug:** Issues are easier to locate and fix
+4. **Easier to reuse:** Single-purpose functions can be reused in different contexts
+5. **Easier to modify:** Changes are localised to specific functions
+6. **Better code organisation:** Related functions can be grouped logically
+7. **Improved readability:** Code reads like a story, with each function representing a step
+
+---
+
+### 🔴 Example: Large, Complex Function
+
+Here's an example of a monolithic function that tries to do too much:
+
+```javascript
+function processUserOrders(users) {
+  let result = [];
+  for (let i = 0; i < users.length; i++) {
+    let user = users[i];
+    if (user.isActive && user.orders && user.orders.length > 0) {
+      let total = 0;
+      let validOrders = [];
+      for (let j = 0; j < user.orders.length; j++) {
+        let order = user.orders[j];
+        if (order.status === 'completed' && order.items && order.items.length > 0) {
+          let orderTotal = 0;
+          let hasDiscount = false;
+          if (order.couponCode) {
+            let coupon = findCoupon(order.couponCode);
+            if (coupon && coupon.isValid && coupon.expiryDate > new Date()) {
+              hasDiscount = true;
+              orderTotal = calculateDiscountedTotal(order.items, coupon);
+            } else {
+              orderTotal = calculateRegularTotal(order.items);
+            }
+          } else {
+            orderTotal = calculateRegularTotal(order.items);
+          }
+          if (orderTotal > 0) {
+            validOrders.push({
+              orderId: order.id,
+              date: order.date,
+              total: orderTotal,
+              itemCount: order.items.length,
+              hasDiscount: hasDiscount
+            });
+            total += orderTotal;
+          }
+        }
+      }
+      if (validOrders.length > 0) {
+        let userLevel = 'standard';
+        if (total >= 1000) {
+          userLevel = 'premium';
+        } else if (total >= 500) {
+          userLevel = 'gold';
+        }
+        let tax = total * 0.1;
+        let finalTotal = total + tax;
+        result.push({
+          userId: user.id,
+          userName: user.name,
+          userEmail: user.email,
+          userLevel: userLevel,
+          orderCount: validOrders.length,
+          orders: validOrders,
+          subtotal: total,
+          tax: tax,
+          total: finalTotal
+        });
+      }
+    }
+  }
+  return result;
+}
+
+function findCoupon(code) {
+  // Simulated coupon lookup
+  const coupons = {
+    'SAVE10': { discount: 0.1, isValid: true, expiryDate: new Date('2025-12-31') },
+    'WELCOME20': { discount: 0.2, isValid: true, expiryDate: new Date('2025-06-30') }
+  };
+  return coupons[code];
+}
+
+function calculateRegularTotal(items) {
+  let total = 0;
+  for (let i = 0; i < items.length; i++) {
+    total += items[i].price * items[i].quantity;
+  }
+  return total;
+}
+
+function calculateDiscountedTotal(items, coupon) {
+  let total = calculateRegularTotal(items);
+  return total * (1 - coupon.discount);
+}
+```
+
+### Problems with This Function
+
+1. **Too many responsibilities:** The function handles user filtering, order validation, discount calculation, user level determination, tax calculation, and result formatting
+2. **Deep nesting:** Multiple levels of nested conditionals make it hard to follow the logic flow
+3. **Hard to test:** Testing requires setting up complex user and order structures
+4. **Difficult to debug:** When something goes wrong, it's hard to identify which part of the logic failed
+5. **Not reusable:** The logic is tightly coupled and can't be reused for other scenarios
+6. **Poor readability:** The function reads like a long story with many subplots
+
+---
+
+### ✅ Example: Refactored into Small, Focused Functions
+
+Here's the same functionality broken down into smaller, focused functions:
+
+```javascript
+// Main function - orchestrates the high-level flow
+function processUserOrders(users) {
+  return users
+    .filter(isActiveUserWithOrders)
+    .map(processUserOrderSummary)
+    .filter(hasValidOrders);
+}
+
+// Predicate functions - single responsibility: check a condition
+function isActiveUserWithOrders(user) {
+  return user.isActive && hasOrders(user);
+}
+
+function hasOrders(user) {
+  return user.orders && user.orders.length > 0;
+}
+
+function hasValidOrders(userSummary) {
+  return userSummary.orderCount > 0;
+}
+
+// Processing functions - single responsibility: transform data
+function processUserOrderSummary(user) {
+  const validOrders = extractValidOrders(user.orders);
+  const subtotal = calculateSubtotal(validOrders);
+  const userLevel = determineUserLevel(subtotal);
+  const tax = calculateTax(subtotal);
+  const total = calculateFinalTotal(subtotal, tax);
+
+  return {
+    userId: user.id,
+    userName: user.name,
+    userEmail: user.email,
+    userLevel: userLevel,
+    orderCount: validOrders.length,
+    orders: validOrders,
+    subtotal: subtotal,
+    tax: tax,
+    total: total
+  };
+}
+
+function extractValidOrders(orders) {
+  return orders
+    .filter(isCompletedOrder)
+    .map(transformOrder)
+    .filter(order => order.total > 0);
+}
+
+function isCompletedOrder(order) {
+  return order.status === 'completed' && hasOrderItems(order);
+}
+
+function hasOrderItems(order) {
+  return order.items && order.items.length > 0;
+}
+
+function transformOrder(order) {
+  const hasDiscount = hasValidCoupon(order.couponCode);
+  const orderTotal = calculateOrderTotal(order.items, order.couponCode);
+
+  return {
+    orderId: order.id,
+    date: order.date,
+    total: orderTotal,
+    itemCount: order.items.length,
+    hasDiscount: hasDiscount
+  };
+}
+
+function calculateOrderTotal(items, couponCode) {
+  if (couponCode && hasValidCoupon(couponCode)) {
+    const coupon = findCoupon(couponCode);
+    return calculateDiscountedTotal(items, coupon);
+  }
+  return calculateRegularTotal(items);
+}
+
+function hasValidCoupon(couponCode) {
+  if (!couponCode) {
+    return false;
+  }
+  
+  const coupon = findCoupon(couponCode);
+  return coupon && coupon.isValid && isCouponNotExpired(coupon);
+}
+
+function isCouponNotExpired(coupon) {
+  return coupon.expiryDate > new Date();
+}
+
+function calculateRegularTotal(items) {
+  return items.reduce((total, item) => {
+    return total + (item.price * item.quantity);
+  }, 0);
+}
+
+function calculateDiscountedTotal(items, coupon) {
+  const regularTotal = calculateRegularTotal(items);
+  return regularTotal * (1 - coupon.discount);
+}
+
+function calculateSubtotal(orders) {
+  return orders.reduce((sum, order) => sum + order.total, 0);
+}
+
+function determineUserLevel(subtotal) {
+  if (subtotal >= 1000) {
+    return 'premium';
+  }
+  if (subtotal >= 500) {
+    return 'gold';
+  }
+  return 'standard';
+}
+
+function calculateTax(subtotal) {
+  const TAX_RATE = 0.1;
+  return subtotal * TAX_RATE;
+}
+
+function calculateFinalTotal(subtotal, tax) {
+  return subtotal + tax;
+}
+
+function findCoupon(code) {
+  // Simulated coupon lookup
+  const coupons = {
+    'SAVE10': { discount: 0.1, isValid: true, expiryDate: new Date('2025-12-31') },
+    'WELCOME20': { discount: 0.2, isValid: true, expiryDate: new Date('2025-06-30') }
+  };
+  return coupons[code];
+}
+```
+
+### How This Refactoring Improved the Code
+
+1. **Single responsibility:** Each function now has one clear purpose
+2. **Readable flow:** The main function reads like a story: filter, map, filter
+3. **Easy to test:** Each function can be tested independently with simple inputs
+4. **Reusable components:** Functions like `calculateRegularTotal()` can be used elsewhere
+5. **No deep nesting:** Logic is flattened and easier to follow
+6. **Self-documenting:** Function names explain what each piece does
+7. **Easier to modify:** Want to change tax calculation? Only modify `calculateTax()`
+8. **Better error handling:** Errors can be traced to specific, small functions
+
+---
+
+### 💭 Reflections on Function Decomposition
+
+#### Why is Breaking Down Functions Beneficial?
+
+Breaking down large functions into smaller, focused ones offers numerous advantages:
+
+1. **Improved Readability**
+   - Small functions are easier to understand at a glance
+   - Each function tells a clear, single part of the story
+   - Readers can understand the high-level flow first, then dive into details as needed
+   - Code reads more like documentation than implementation
+
+2. **Enhanced Testability**
+   - Small functions are easy to test in isolation
+   - Test cases are simpler to write and understand
+   - Edge cases can be tested for each function independently
+   - Test failures point directly to the problematic function
+
+3. **Easier Debugging**
+   - When bugs occur, you can quickly identify which small function is responsible
+   - Debugging can be focused on a specific piece of logic
+   - Stack traces are more meaningful with descriptive function names
+   - It's easier to add logging to specific functions
+
+4. **Better Code Reuse**
+   - Small, focused functions can be reused across different contexts
+   - Common operations (like `calculateRegularTotal()`) can be shared
+   - Reduces code duplication
+   - Promotes building a library of utility functions
+
+5. **Simplified Maintenance**
+   - Changes are localised to specific functions
+   - Modifying one part doesn't risk breaking unrelated functionality
+   - Easier to understand the impact of changes
+   - Code reviews focus on specific, small changes
+
+6. **Improved Collaboration**
+   - Team members can work on different small functions without conflicts
+   - Easier to review and understand changes in pull requests
+   - New team members can understand the codebase incrementally
+   - Knowledge sharing is easier when code is well-structured
+
+7. **Reduced Cognitive Load**
+   - Developers don't need to hold the entire function in memory
+   - Can focus on one small piece at a time
+   - Mental models are simpler and more accurate
+   - Less mental fatigue when working with the code
+
+8. **Better Error Handling**
+   - Errors can be caught and handled at appropriate levels
+   - Error messages can be more specific
+   - Failures are isolated to specific operations
+   - Recovery strategies can be implemented per function
+
+#### How Did Refactoring Improve the Structure of the Code?
+
+The refactoring transformed the code structure in several meaningful ways:
+
+1. **Separation of Concerns**
+   - **Before:** One function handled filtering, calculation, formatting, and business logic
+   - **After:** Each function has a single, clear responsibility
+   - Logic is separated into distinct layers (filtering, transformation, calculation)
+
+2. **Improved Abstraction Levels**
+   - **Before:** All levels of abstraction mixed together (high-level orchestration alongside low-level calculations)
+   - **After:** Clear separation between high-level flow (`processUserOrders()`) and implementation details (`calculateRegularTotal()`)
+   - Readers can choose their level of detail based on what they need
+
+3. **Functional Composition**
+   - **Before:** Imperative style with nested loops and conditionals
+   - **After:** Declarative style using function composition (`filter().map().filter()`)
+   - Code expresses *what* needs to happen, not *how* it happens step-by-step
+
+4. **Reduced Complexity**
+   - **Before:** Cyclomatic complexity was high due to nested conditionals
+   - **After:** Each function has low complexity, making it easier to reason about
+   - Decision points are isolated in predicate functions
+
+5. **Enhanced Discoverability**
+   - **Before:** Logic was hidden inside a large function
+   - **After:** Each piece of logic is a named function that can be discovered and understood independently
+   - IDE autocomplete and search work better with named functions
+
+6. **Better Organisation**
+   - **Before:** All logic in one place, hard to navigate
+   - **After:** Related functions can be grouped (predicates together, calculations together)
+   - Code can be organised by feature or domain concept
+
+7. **Flexibility and Extensibility**
+   - **Before:** Adding new features required modifying the large function
+   - **After:** New features can be added by composing existing functions or adding new small ones
+   - Changes are isolated and don't affect unrelated functionality
+
+8. **Documentation Through Structure**
+   - **Before:** Comments were needed to explain sections of the large function
+   - **After:** Function names serve as documentation
+   - The structure itself tells the story of the code
+
+**Key takeaway:** Small functions aren't just about reducing line count—they're about creating a codebase that is easier to understand, test, modify, and extend. The initial investment in breaking down functions pays off exponentially as the codebase grows and evolves.
+
+---
+
 ## 📏 Code Formatting & Style Guides
 
 ### 🎯 Understanding Code Formatting
