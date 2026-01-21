@@ -696,96 +696,11 @@ While there's no hard rule, consider these guidelines:
 
 ---
 
-### 🔴 Example: Large, Complex Function
+### 🌐 Real-World Example: Small, Focused Functions Repository
 
-Here's an example of a monolithic function that tries to do too much:
+For a comprehensive real-world example demonstrating the principles of writing small, focused functions, refer to the [small_focus_function_test](https://github.com/yjfvictor/small_focus_function_test) repository. This repository showcases:
 
-```javascript
-function processUserOrders(users) {
-  let result = [];
-  for (let i = 0; i < users.length; i++) {
-    let user = users[i];
-    if (user.isActive && user.orders && user.orders.length > 0) {
-      let total = 0;
-      let validOrders = [];
-      for (let j = 0; j < user.orders.length; j++) {
-        let order = user.orders[j];
-        if (order.status === 'completed' && order.items && order.items.length > 0) {
-          let orderTotal = 0;
-          let hasDiscount = false;
-          if (order.couponCode) {
-            let coupon = findCoupon(order.couponCode);
-            if (coupon && coupon.isValid && coupon.expiryDate > new Date()) {
-              hasDiscount = true;
-              orderTotal = calculateDiscountedTotal(order.items, coupon);
-            } else {
-              orderTotal = calculateRegularTotal(order.items);
-            }
-          } else {
-            orderTotal = calculateRegularTotal(order.items);
-          }
-          if (orderTotal > 0) {
-            validOrders.push({
-              orderId: order.id,
-              date: order.date,
-              total: orderTotal,
-              itemCount: order.items.length,
-              hasDiscount: hasDiscount
-            });
-            total += orderTotal;
-          }
-        }
-      }
-      if (validOrders.length > 0) {
-        let userLevel = 'standard';
-        if (total >= 1000) {
-          userLevel = 'premium';
-        } else if (total >= 500) {
-          userLevel = 'gold';
-        }
-        let tax = total * 0.1;
-        let finalTotal = total + tax;
-        result.push({
-          userId: user.id,
-          userName: user.name,
-          userEmail: user.email,
-          userLevel: userLevel,
-          orderCount: validOrders.length,
-          orders: validOrders,
-          subtotal: total,
-          tax: tax,
-          total: finalTotal
-        });
-      }
-    }
-  }
-  return result;
-}
-
-function findCoupon(code) {
-  // Simulated coupon lookup
-  const coupons = {
-    'SAVE10': { discount: 0.1, isValid: true, expiryDate: new Date('2025-12-31') },
-    'WELCOME20': { discount: 0.2, isValid: true, expiryDate: new Date('2025-06-30') }
-  };
-  return coupons[code];
-}
-
-function calculateRegularTotal(items) {
-  let total = 0;
-  for (let i = 0; i < items.length; i++) {
-    total += items[i].price * items[i].quantity;
-  }
-  return total;
-}
-
-function calculateDiscountedTotal(items, coupon) {
-  let total = calculateRegularTotal(items);
-  return total * (1 - coupon.discount);
-}
-```
-
-### Problems with This Function
+Before Modification (Commit 988c551e0021f7f4f880fedd07277392e552f58c):
 
 1. **Too many responsibilities:** The function handles user filtering, order validation, discount calculation, user level determination, tax calculation, and result formatting
 2. **Deep nesting:** Multiple levels of nested conditionals make it hard to follow the logic flow
@@ -794,149 +709,7 @@ function calculateDiscountedTotal(items, coupon) {
 5. **Not reusable:** The logic is tightly coupled and can't be reused for other scenarios
 6. **Poor readability:** The function reads like a long story with many subplots
 
----
-
-### ✅ Example: Refactored into Small, Focused Functions
-
-Here's the same functionality broken down into smaller, focused functions:
-
-```javascript
-// Main function - orchestrates the high-level flow
-function processUserOrders(users) {
-  return users
-    .filter(isActiveUserWithOrders)
-    .map(processUserOrderSummary)
-    .filter(hasValidOrders);
-}
-
-// Predicate functions - single responsibility: check a condition
-function isActiveUserWithOrders(user) {
-  return user.isActive && hasOrders(user);
-}
-
-function hasOrders(user) {
-  return user.orders && user.orders.length > 0;
-}
-
-function hasValidOrders(userSummary) {
-  return userSummary.orderCount > 0;
-}
-
-// Processing functions - single responsibility: transform data
-function processUserOrderSummary(user) {
-  const validOrders = extractValidOrders(user.orders);
-  const subtotal = calculateSubtotal(validOrders);
-  const userLevel = determineUserLevel(subtotal);
-  const tax = calculateTax(subtotal);
-  const total = calculateFinalTotal(subtotal, tax);
-
-  return {
-    userId: user.id,
-    userName: user.name,
-    userEmail: user.email,
-    userLevel: userLevel,
-    orderCount: validOrders.length,
-    orders: validOrders,
-    subtotal: subtotal,
-    tax: tax,
-    total: total
-  };
-}
-
-function extractValidOrders(orders) {
-  return orders
-    .filter(isCompletedOrder)
-    .map(transformOrder)
-    .filter(order => order.total > 0);
-}
-
-function isCompletedOrder(order) {
-  return order.status === 'completed' && hasOrderItems(order);
-}
-
-function hasOrderItems(order) {
-  return order.items && order.items.length > 0;
-}
-
-function transformOrder(order) {
-  const hasDiscount = hasValidCoupon(order.couponCode);
-  const orderTotal = calculateOrderTotal(order.items, order.couponCode);
-
-  return {
-    orderId: order.id,
-    date: order.date,
-    total: orderTotal,
-    itemCount: order.items.length,
-    hasDiscount: hasDiscount
-  };
-}
-
-function calculateOrderTotal(items, couponCode) {
-  if (couponCode && hasValidCoupon(couponCode)) {
-    const coupon = findCoupon(couponCode);
-    return calculateDiscountedTotal(items, coupon);
-  }
-  return calculateRegularTotal(items);
-}
-
-function hasValidCoupon(couponCode) {
-  if (!couponCode) {
-    return false;
-  }
-  
-  const coupon = findCoupon(couponCode);
-  return coupon && coupon.isValid && isCouponNotExpired(coupon);
-}
-
-function isCouponNotExpired(coupon) {
-  return coupon.expiryDate > new Date();
-}
-
-function calculateRegularTotal(items) {
-  return items.reduce((total, item) => {
-    return total + (item.price * item.quantity);
-  }, 0);
-}
-
-function calculateDiscountedTotal(items, coupon) {
-  const regularTotal = calculateRegularTotal(items);
-  return regularTotal * (1 - coupon.discount);
-}
-
-function calculateSubtotal(orders) {
-  return orders.reduce((sum, order) => sum + order.total, 0);
-}
-
-function determineUserLevel(subtotal) {
-  if (subtotal >= 1000) {
-    return 'premium';
-  }
-  if (subtotal >= 500) {
-    return 'gold';
-  }
-  return 'standard';
-}
-
-function calculateTax(subtotal) {
-  const TAX_RATE = 0.1;
-  return subtotal * TAX_RATE;
-}
-
-function calculateFinalTotal(subtotal, tax) {
-  return subtotal + tax;
-}
-
-function findCoupon(code) {
-  // Simulated coupon lookup
-  const coupons = {
-    'SAVE10': { discount: 0.1, isValid: true, expiryDate: new Date('2025-12-31') },
-    'WELCOME20': { discount: 0.2, isValid: true, expiryDate: new Date('2025-06-30') }
-  };
-  return coupons[code];
-}
-```
-
-### How This Refactoring Improved the Code
+After Modification (<https://github.com/yjfvictor/small_focus_function_test/pull/1>):
 
 1. **Single responsibility:** Each function now has one clear purpose
 2. **Readable flow:** The main function reads like a story: filter, map, filter
@@ -946,6 +719,8 @@ function findCoupon(code) {
 6. **Self-documenting:** Function names explain what each piece does
 7. **Easier to modify:** Want to change tax calculation? Only modify `calculateTax()`
 8. **Better error handling:** Errors can be traced to specific, small functions
+
+Exploring this repository will provide additional context and help reinforce the function decomposition principles outlined above through real, working code examples.
 
 ---
 
