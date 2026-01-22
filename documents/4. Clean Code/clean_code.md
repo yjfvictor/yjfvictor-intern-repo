@@ -2659,3 +2659,494 @@ const fee = calculateFee(order.items.length);
 **Most importantly:** Refactoring for simplicity is not about making code shorter—it's about making code **easier to understand**. The refactored code is actually more explicit in some ways (separate functions instead of one large method), but it's dramatically easier to read, test, and maintain.
 
 **Final reflection:** The hardest part of refactoring for simplicity is recognising when code is over-engineered. Ask yourself: "Does this abstraction make the code clearer, or does it add complexity?" If it adds complexity without clear benefit, simplify it. The goal is code that a developer can understand quickly, not code that demonstrates advanced patterns or techniques.
+
+---
+
+## 💬 Commenting & Documentation
+
+### 🎯 Understanding Comments and Documentation
+
+Comments and documentation serve a crucial role in software development, but they must be used judiciously. The goal is to provide clarity where code alone cannot express intent, rationale, or important constraints—not to restate what the code already makes obvious.
+
+---
+
+### 📚 Best Practices for Comments and Documentation
+
+#### Doxygen-Style Documentation
+
+Doxygen is a powerful documentation generation tool that extracts comments from source code to create comprehensive API documentation. Using Doxygen-style comments provides several benefits:
+
+1. **Standardised Format:** Consistent structure across the codebase
+2. **Automated Documentation:** Generate HTML, PDF, or other formats automatically
+3. **IDE Integration:** Better autocomplete and inline documentation
+4. **API Clarity:** Clear contracts for public interfaces
+
+#### Doxygen Comment Structure
+
+A well-structured Doxygen comment should include:
+
+```javascript
+/**
+ * @brief One-sentence summary of what the function does
+ * @details Longer explanation of behaviour, algorithm, constraints, or side-effects.
+ * Omit if the brief description is sufficient.
+ * @param {type} paramName Description of the parameter, including valid values and constraints
+ * @return {type} Description of return value, including units, error codes, or special cases
+ * @throws {ErrorType} Description of when and why exceptions are thrown
+ * @note Important information that developers should be aware of
+ * @warning Dangerous or easily misused behaviour
+ * @see Related functions, classes, or documentation
+ * @example
+ * // Example usage demonstrating the function
+ * const result = exampleFunction(arg1, arg2);
+ */
+```
+
+#### Key Doxygen Tags
+
+- `@brief`: One-sentence summary (often auto-detected from first sentence)
+- `@details`: Extended description when brief is insufficient
+- `@param`: Document each parameter with purpose, constraints, and valid values
+- `@return`: Describe return value meaning, units, and special cases
+- `@throws` or `@exception`: Document exceptions that may be thrown
+- `@note`: Important information developers should know
+- `@warning`: Dangerous or easily misused behaviour
+- `@see`: Links to related functions, classes, or external documentation
+- `@example`: Code examples demonstrating usage
+- `@since`: Version or date when feature was added
+- `@file`: File-level documentation describing the module's purpose
+
+---
+
+### 📝 Example: Refactoring Poorly Commented Code
+
+To demonstrate the principles of effective commenting and documentation, I created a real-world example in the [Commenting-and-Documentation-test](https://github.com/yjfvictor/Commenting-and-Documentation-test) repository. This example shows the transformation from code with ineffective, redundant comments to well-documented code using Doxygen-style comments.
+
+#### Before: Poorly Commented Code
+
+The original code ([commit `95d4d38fe801dbc879afa0b5d81bd49c764dade1`](https://github.com/yjfvictor/Commenting-and-Documentation-test/tree/95d4d38fe801dbc879afa0b5d81bd49c764dade1)) demonstrates several common commenting anti-patterns:
+
+**Key Issues:**
+
+1. **Redundant Comments:** Comments like `// Add`, `// Subtract`, `// Return result` simply restate what the code already says
+2. **Vague Descriptions:** Comments like "This function does stuff" and "Process users" don't explain purpose or behaviour
+3. **No Parameter Documentation:** Parameters have no explanation of valid values or constraints
+4. **No Error Documentation:** Error cases aren't documented
+5. **Poor Variable Names:** Cryptic names like `calc`, `proc`, `x`, `y`, `u` obscure intent—better names would eliminate the need for many comments
+6. **Missing Context:** No explanation of business rules (why age >= 18? what does 'active' mean?)
+
+#### After: Well-Commented Code with Doxygen
+
+The refactored version ([Pull Request #1](https://github.com/yjfvictor/Commenting-and-Documentation-test/pull/1), merged to [commit `6f8aaa76e20ac58408678181a159fb5dd7a78dc3`](https://github.com/yjfvictor/Commenting-and-Documentation-test/tree/6f8aaa76e20ac58408678181a159fb5dd7a78dc3)) demonstrates how the same functionality can be achieved with proper Doxygen-style documentation and improved code:
+
+**Key Improvements:**
+
+1. **Clear Purpose:** `@brief` immediately explains what each function does
+2. **Detailed Documentation:** `@details` provides context and behaviour explanation
+3. **Parameter Clarity:** `@param` documents each parameter with constraints and valid values
+4. **Return Value Documentation:** `@return` explains what is returned and in what format
+5. **Error Documentation:** `@throws` documents when and why errors occur
+6. **Usage Examples:** `@example` shows how to use the function correctly
+7. **Notes and Warnings:** `@note` highlights important implementation details
+8. **Better Code:** Improved variable names (`operand1` vs `x`, `calculate` vs `calc`) make code self-documenting
+
+This repository showcases:
+
+- **Before (with poor comments):** Code with redundant, vague, and unhelpful comments that don't add value
+- **After (with Doxygen documentation):** Well-documented code using Doxygen-style comments that provide comprehensive API documentation
+- **Clear transformation:** Step-by-step refactoring showing how to improve both code quality and documentation
+- **Practical examples:** Real-world code demonstrating the principles discussed in this document
+
+Exploring this repository will provide additional context and help reinforce the commenting and documentation principles outlined above through real, working code examples.
+
+---
+
+### 💭 Reflections on Commenting and Documentation
+
+#### When Should You Add Comments?
+
+Comments are appropriate and valuable in the following situations:
+
+##### 1. Explaining Intent and Rationale
+
+**When to use:** When the *why* behind code isn't obvious from the code itself.
+
+**Example:**
+
+```javascript
+// Use a timeout of 5000ms instead of the default 3000ms because the external
+// API occasionally takes longer to respond during peak hours, and we want to
+// avoid false timeout errors.
+const timeout = 5000;
+```
+
+**Why it's needed:** The code shows *what* (5000ms timeout), but not *why* (API performance during peak hours). This rationale helps future developers understand the decision.
+
+##### 2. Documenting Non-Obvious Behaviour or Edge Cases
+
+**When to use:** When code behaves in ways that aren't immediately apparent.
+
+**Example:**
+
+```javascript
+/**
+ * @brief Calculates discount with special handling for edge cases
+ * @details If the discount percentage exceeds 100%, it's capped at 100% to prevent
+ * negative prices. Additionally, if the original price is already zero or negative,
+ * the function returns 0 to avoid invalid calculations.
+ * @param {number} originalPrice The original price before discount
+ * @param {number} discountPercent The discount percentage (0-100, but may exceed 100)
+ * @return {number} The discounted price, never negative
+ */
+function calculateDiscountedPrice(originalPrice, discountPercent) {
+  // Cap discount at 100% to prevent negative prices
+  const cappedDiscount = Math.min(discountPercent, 100);
+  
+  // Handle edge case: zero or negative original price
+  if (originalPrice <= 0) {
+    return 0;
+  }
+  
+  return originalPrice * (1 - cappedDiscount / 100);
+}
+```
+
+**Why it's needed:** The edge case handling (capping at 100%, handling zero/negative prices) isn't obvious from the function name or basic logic. Documentation explains these important constraints.
+
+##### 3. Public API Documentation
+
+**When to use:** For functions, classes, or modules that are part of a public API or library.
+
+**Example:**
+
+```javascript
+/**
+ * @brief Validates user credentials against the authentication system
+ * @details This function performs synchronous validation. For asynchronous validation
+ * with database lookups, use validateUserCredentialsAsync() instead.
+ * @param {string} username The username to validate (3-20 alphanumeric characters)
+ * @param {string} password The password to validate (minimum 8 characters)
+ * @return {boolean} True if credentials are valid, false otherwise
+ * @throws {TypeError} If username or password are not strings
+ * @see validateUserCredentialsAsync For asynchronous validation
+ * @since Version 2.1.0
+ */
+function validateUserCredentials(username, password) {
+  // Implementation...
+}
+```
+
+**Why it's needed:** Public APIs need comprehensive documentation so external developers can use them correctly without reading implementation details.
+
+##### 4. Documenting Workarounds and Limitations
+
+**When to use:** When code includes workarounds for bugs, platform quirks, or known limitations.
+
+**Example:**
+
+```javascript
+/**
+ * @brief Formats date for display, with workaround for Safari date parsing
+ * @details Safari's Date constructor doesn't support ISO 8601 date strings without
+ * time components. This function converts the date string to a format Safari can parse.
+ * @note This is a workaround for Safari's date parsing bug. Once Safari fixes this
+ * issue, this function can be simplified.
+ * @param {string} dateString ISO 8601 date string (YYYY-MM-DD)
+ * @return {Date} Parsed Date object
+ * @see https://bugs.webkit.org/show_bug.cgi?id=123456 Safari bug report
+ */
+function parseDateForSafari(dateString) {
+  // Workaround: Safari requires explicit time component
+  const safariCompatibleDate = `${dateString}T00:00:00`;
+  return new Date(safariCompatibleDate);
+}
+```
+
+**Why it's needed:** Workarounds are often confusing without explanation. Documentation helps future developers understand why the workaround exists and when it can be removed.
+
+##### 5. Warning About Consequences or Side Effects
+
+**When to use:** When code has important side effects or consequences that aren't obvious.
+
+**Example:**
+
+```javascript
+/**
+ * @brief Clears all cached data and forces a full reload
+ * @warning This function will invalidate all cached user sessions. Users will need to
+ * log in again after calling this function. Use with caution in production.
+ * @param {boolean} clearUserSessions If true, also clears all active user sessions
+ * @return {Promise<void>} Resolves when cache is cleared
+ */
+async function clearCache(clearUserSessions = false) {
+  // Implementation...
+}
+```
+
+**Why it's needed:** Side effects like invalidating user sessions aren't obvious from the function name. Documentation prevents accidental misuse.
+
+##### 6. Legal and Meta Information
+
+**When to use:** For license headers, copyright information, or authorship.
+
+**Example:**
+
+```javascript
+/**
+ * @file User authentication module
+ * @brief Handles user login, logout, and session management
+ * @author Victor Yeh
+ * @copyright Copyright (c) 2026 Victor Yeh
+ * @license MIT License
+ */
+```
+
+**Why it's needed:** Legal requirements and attribution are important for open-source projects and corporate codebases.
+
+---
+
+#### When Should You Avoid Comments and Instead Improve the Code?
+
+Comments should be avoided when they can be replaced by better code. Here are common situations where refactoring is preferable:
+
+##### 1. Comments That Restate What Code Already Says
+
+**Bad:**
+
+```javascript
+// Increment the counter
+counter++;
+
+// Return the result
+return result;
+
+// Check if user is active
+if (user.status === 'active') {
+  // Add user to list
+  activeUsers.push(user);
+}
+```
+
+**Better:** Remove redundant comments. The code is already clear:
+
+```javascript
+counter++;
+return result;
+
+if (user.status === 'active') {
+  activeUsers.push(user);
+}
+```
+
+**Why:** Redundant comments add noise without value. They must be maintained alongside code and can become misleading if code changes but comments don't.
+
+##### 2. Comments Explaining What a Function Does (When Function Name Should Explain It)
+
+**Bad:**
+
+```javascript
+// This function calculates the total price
+function calc(orders) {
+  let total = 0;
+  for (let i = 0; i < orders.length; i++) {
+    total += orders[i].price;
+  }
+  return total;
+}
+```
+
+**Better:** Rename the function and remove the comment:
+
+```javascript
+function calculateTotalPrice(orders) {
+  let total = 0;
+  for (let i = 0; i < orders.length; i++) {
+    total += orders[i].price;
+  }
+  return total;
+}
+```
+
+**Why:** A well-named function is self-documenting. The comment becomes unnecessary when the function name clearly expresses intent.
+
+##### 3. Comments Explaining Complex Logic (When Logic Can Be Simplified)
+
+**Bad:**
+
+```javascript
+// Check if user is eligible: must be 18+, active status, and have completed profile
+if (user.age >= 18 && user.status === 'active' && user.profileComplete === true) {
+  // Process the user
+  processUser(user);
+}
+```
+
+**Better:** Extract the condition into a well-named function:
+
+```javascript
+if (isUserEligible(user)) {
+  processUser(user);
+}
+
+function isUserEligible(user) {
+  const MINIMUM_AGE = 18;
+  return user.age >= MINIMUM_AGE 
+    && user.status === 'active' 
+    && user.profileComplete === true;
+}
+```
+
+**Why:** A well-named function (`isUserEligible`) is clearer than a comment explaining a complex condition. The function name documents the intent, and the implementation is easy to understand.
+
+##### 4. Comments Explaining Variable Purpose (When Variable Name Should Explain It)
+
+**Bad:**
+
+```javascript
+// Array to store active users
+let arr = [];
+
+// Total price of all orders
+let tot = 0;
+
+// Current user being processed
+let u = users[i];
+```
+
+**Better:** Use descriptive variable names:
+
+```javascript
+let activeUsers = [];
+let totalPrice = 0;
+let currentUser = users[i];
+```
+
+**Why:** Descriptive variable names eliminate the need for comments. `activeUsers` is self-explanatory; `arr` requires a comment to understand.
+
+##### 5. Commented-Out Code (Dead Code)
+
+**Bad:**
+
+```javascript
+function processOrder(order) {
+  // Old implementation - keeping for reference
+  // if (order.total > 1000) {
+  //   applyDiscount(order, 0.1);
+  // }
+  
+  // New implementation
+  if (order.total > 1000) {
+    applyTierDiscount(order);
+  }
+}
+```
+
+**Better:** Remove commented-out code and rely on version control:
+
+```javascript
+function processOrder(order) {
+  if (order.total > 1000) {
+    applyTierDiscount(order);
+  }
+}
+```
+
+**Why:** Commented-out code clutters the codebase and can mislead developers. Version control (Git) preserves history if you need to reference old implementations.
+
+##### 6. Journal-Style Comments (Change History)
+
+**Bad:**
+
+```javascript
+// Added on 2026-01-15 by John
+// Modified on 2026-02-20 by Jane to fix bug #123
+// Updated on 2026-03-10 by Bob to add new feature
+function processData(data) {
+  // Implementation...
+}
+```
+
+**Better:** Remove change history comments. Use version control:
+
+```javascript
+function processData(data) {
+  // Implementation...
+}
+```
+
+**Why:** Version control systems (Git) provide complete change history with authors, dates, and commit messages. Comments in code become outdated and add noise.
+
+##### 7. Comments That Should Be Tests
+
+**Bad:**
+
+```javascript
+// This function should handle null inputs gracefully
+// It should return an empty array if the input is null
+function processItems(items) {
+  if (items === null) {
+    return [];
+  }
+  // Implementation...
+}
+```
+
+**Better:** Write tests instead of comments:
+
+```javascript
+function processItems(items) {
+  if (items === null) {
+    return [];
+  }
+  // Implementation...
+}
+
+// In test file:
+test('processItems returns empty array for null input', () => {
+  expect(processItems(null)).toEqual([]);
+});
+```
+
+**Why:** Tests are executable documentation. They verify behaviour and fail if code changes break the documented behaviour. Comments can become outdated without anyone noticing.
+
+---
+
+### 🎓 Best Practices Summary
+
+#### Do's ✅
+
+1. **Document public APIs** with comprehensive Doxygen-style comments
+2. **Explain intent and rationale** when code doesn't make the "why" obvious
+3. **Document edge cases and constraints** that aren't apparent from code
+4. **Use `@warning` and `@note`** for important caveats or limitations
+5. **Provide usage examples** with `@example` for complex functions
+6. **Document workarounds** with explanations and links to bug reports
+7. **Keep comments up-to-date** when code changes
+
+#### Don'ts ❌
+
+1. **Don't restate what code already says**—if code is clear, no comment needed
+2. **Don't use comments to explain bad code**—refactor instead
+3. **Don't leave commented-out code**—use version control for history
+4. **Don't write journal-style comments**—version control tracks changes
+5. **Don't comment obvious variable names**—use better names instead
+6. **Don't use comments as a substitute for tests**—write tests for behaviour
+7. **Don't write misleading or outdated comments**—they're worse than no comments
+
+---
+
+### 🎯 Key Takeaways
+
+1. **Comments should explain *why*, not *what*:** Good code already shows what it does. Comments should explain the reasoning, constraints, or context that code cannot express.
+
+2. **Refactor before commenting:** If you find yourself writing a comment to explain what code does, consider refactoring the code to be self-explanatory instead.
+
+3. **Use Doxygen for public APIs:** Doxygen-style comments provide structured, comprehensive documentation that can be automatically generated into documentation websites.
+
+4. **Comments are a code smell:** Excessive comments often indicate that code needs refactoring. Well-written code should be mostly self-documenting.
+
+5. **Balance is key:** Some comments are essential (explaining why, documenting APIs, warning about side effects), but most code should be clear enough to not need comments.
+
+6. **Maintain comments like code:** Outdated comments are worse than no comments. If you change code, update or remove related comments.
+
+**Most importantly:** The best comment is the one you don't need to write. Strive for code so clear and well-named that comments become unnecessary for explaining *what* the code does. Reserve comments for explaining *why* decisions were made, documenting public APIs, and warning about non-obvious behaviour or constraints.
