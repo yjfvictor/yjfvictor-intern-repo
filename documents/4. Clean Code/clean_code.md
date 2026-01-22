@@ -3150,3 +3150,199 @@ test('processItems returns empty array for null input', () => {
 6. **Maintain comments like code:** Outdated comments are worse than no comments. If you change code, update or remove related comments.
 
 **Most importantly:** The best comment is the one you don't need to write. Strive for code so clear and well-named that comments become unnecessary for explaining *what* the code does. Reserve comments for explaining *why* decisions were made, documenting public APIs, and warning about non-obvious behaviour or constraints.
+
+---
+
+## 📌 Handling Errors & Edge Cases
+
+### 🎯 Error Handling Overview
+
+Robust code must gracefully handle errors and unexpected inputs. This section explores strategies for error handling, including guard clauses, input validation, and proper error propagation.
+
+---
+
+### 🔍 Error Handling Strategies
+
+#### 1. Guard Clauses
+
+**What are Guard Clauses?**
+
+Guard clauses are early-exit checks at the beginning of functions that validate inputs or preconditions before executing the main logic. They prevent errors by catching invalid states early and avoiding deeply nested conditional logic.
+
+**Benefits:**
+
+- **Reduced nesting:** Flattens code structure, making it more readable
+- **Early validation:** Catches invalid inputs before they cause problems
+- **Clearer intent:** Makes preconditions explicit and visible
+- **Fail-fast principle:** Errors are detected immediately, preventing cascading failures
+
+**Example Pattern:**
+
+```javascript
+function processData(data) {
+  // Guard clause: Check if data exists
+  if (!data) {
+    throw new ValidationError('Data must be provided');
+  }
+  
+  // Guard clause: Check if data is correct type
+  if (typeof data !== 'object') {
+    throw new ValidationError('Data must be an object');
+  }
+  
+  // Main logic proceeds with confidence that data is valid
+  // ...
+}
+```
+
+#### 2. Input Validation
+
+**Key Principles:**
+
+- **Type checking:** Verify that inputs match expected types
+- **Range validation:** Check numeric values are within acceptable ranges
+- **Null/undefined checks:** Handle missing or uninitialised values
+- **Empty collection checks:** Validate arrays, objects, and strings aren't empty when required
+
+#### 3. Custom Error Classes
+
+Creating domain-specific error types helps categorise and handle different error scenarios appropriately:
+
+```javascript
+class ValidationError extends Error {
+  constructor(message) {
+    super(message);
+    this.name = 'ValidationError';
+  }
+}
+```
+
+#### 4. Try-Catch Blocks
+
+**Best Practices:**
+
+- **Scope narrowly:** Only wrap code that might throw errors
+- **Don't swallow errors:** Always log or handle errors appropriately
+- **Use finally for cleanup:** Ensure resources are released even if errors occur
+
+---
+
+### 📝 Code Comparison: Before and After
+
+This section compares code from the repository [Handling-Errors-and-Edge-Cases-Test](https://github.com/yjfvictor/Handling-Errors-and-Edge-Cases-Test), demonstrating the transformation from code without proper error handling to robust, production-ready code.
+
+**Repository:** [Handling-Errors-and-Edge-Cases-Test](https://github.com/yjfvictor/Handling-Errors-and-Edge-Cases-Test)  
+**Before Commit:** [`765e17a185c14306574c4506b6b405093ae34233`](https://github.com/yjfvictor/Handling-Errors-and-Edge-Cases-Test/commit/765e17a185c14306574c4506b6b405093ae34233)  
+**After Commit (PR #1):** [`bbef5ec4591414bdaca1a1e12180503249581388`](https://github.com/yjfvictor/Handling-Errors-and-Edge-Cases-Test/commit/bbef5ec4591414bdaca1a1e12180503249581388)  
+**Pull Request:** [#1](https://github.com/yjfvictor/Handling-Errors-and-Edge-Cases-Test/pull/1)
+
+#### Issues with the Original Code (Commit `765e17a`)
+
+The original code in commit [`765e17a185c14306574c4506b6b405093ae34233`](https://github.com/yjfvictor/Handling-Errors-and-Edge-Cases-Test/commit/765e17a185c14306574c4506b6b405093ae34233) demonstrates several critical problems:
+
+1. **No input validation:**
+   - `calculateAverageScore()` doesn't check if `scores` is an array or if it's empty
+   - No validation that scores are numbers or within valid ranges
+   - No check if `totalPossible` is a valid positive number
+
+2. **Division by zero risk:**
+   - `divide()` function will return `Infinity` or `NaN` when dividing by zero
+   - No validation that inputs are numbers
+
+3. **Null/undefined access:**
+   - `getUserFullName()` will throw `TypeError` if `user` is null/undefined
+   - No check if `firstName` or `lastName` properties exist
+   - No validation that name fields are strings
+
+4. **Silent failures:**
+   - Functions may return `NaN`, `Infinity`, or throw cryptic errors
+   - No meaningful error messages to help debug issues
+
+5. **No edge case handling:**
+   - Empty arrays cause division by zero
+   - Negative scores or scores exceeding total possible points aren't caught
+   - Empty strings in names aren't validated
+
+#### Improvements in the Refactored Code (PR #1, Commit `bbef5ec`)
+
+The refactored version in [Pull Request #1](https://github.com/yjfvictor/Handling-Errors-and-Edge-Cases-Test/pull/1), merged as commit [`bbef5ec4591414bdaca1a1e12180503249581388`](https://github.com/yjfvictor/Handling-Errors-and-Edge-Cases-Test/commit/bbef5ec4591414bdaca1a1e12180503249581388), addresses all these issues:
+
+1. **Comprehensive guard clauses:**
+   - All functions validate inputs at the beginning
+   - Type checking ensures correct data types
+   - Range validation prevents invalid values
+
+2. **Custom error handling:**
+   - `ValidationError` class provides clear, specific error messages
+   - Errors are thrown early with descriptive messages
+
+3. **Edge case coverage:**
+   - Empty arrays are caught before processing
+   - Division by zero is explicitly prevented
+   - Null/undefined values are validated
+   - Empty strings are trimmed and validated
+
+4. **Result validation:**
+   - Final results are checked for `NaN` or `Infinity`
+   - Ensures functions return valid values
+
+---
+
+### 💡 How Error Handling Improves Reliability
+
+1. **Prevents crashes:** By validating inputs early, we prevent runtime errors that could crash the application or cause unexpected behaviour.
+
+2. **Clear error messages:** Specific error messages help developers quickly identify and fix issues during development and debugging.
+
+3. **Fail-fast principle:** Errors are detected immediately when invalid data is provided, preventing bugs from propagating through the system and making them easier to trace.
+
+4. **Predictable behaviour:** Well-handled errors make code behaviour predictable. Developers know exactly what will happen when invalid inputs are provided.
+
+5. **Better user experience:** In production, proper error handling allows applications to degrade gracefully, showing meaningful error messages to users instead of crashing.
+
+6. **Easier testing:** Functions with clear error handling are easier to test. Test cases can verify that appropriate errors are thrown for invalid inputs.
+
+7. **Maintainability:** Code with explicit error handling is self-documenting. Guard clauses make preconditions and constraints visible to other developers.
+
+8. **Debugging efficiency:** When errors occur, clear error messages and early validation make it much faster to identify the root cause.
+
+---
+
+### 🎓 Error Handling Best Practices
+
+#### Recommended Practices ✅
+
+1. **Use guard clauses early:** Validate inputs at the beginning of functions
+2. **Throw meaningful errors:** Provide specific, descriptive error messages
+3. **Check for edge cases:** Empty arrays, null values, zero, negative numbers, etc.
+4. **Validate types:** Ensure inputs match expected types before processing
+5. **Use custom error classes:** Create domain-specific errors for better categorisation
+6. **Test error paths:** Write tests for invalid inputs and edge cases
+7. **Validate results:** Check that computed values are valid before returning
+
+#### Practices to Avoid ❌
+
+1. **Don't ignore errors:** Always handle or propagate errors appropriately
+2. **Don't use bare catch blocks:** Never suppress errors without logging or handling
+3. **Don't delay validation:** Check inputs early, not deep in nested logic
+4. **Don't return invalid values:** Throw errors instead of returning `NaN` or `undefined`
+5. **Don't assume inputs are valid:** Always validate, even for internal functions
+6. **Don't write overly broad try-catch:** Only catch errors you can meaningfully handle
+
+---
+
+### 🎯 Error Handling Key Takeaways
+
+1. **Guard clauses are essential:** Early validation prevents errors and makes code more readable by reducing nesting.
+
+2. **Fail fast:** Detect and report errors immediately rather than allowing invalid data to propagate.
+
+3. **Be specific:** Use custom error classes and descriptive messages to make debugging easier.
+
+4. **Think about edge cases:** Consider empty inputs, null values, boundary conditions, and invalid types.
+
+5. **Validate everything:** Don't trust inputs, even from internal functions. Validate types, ranges, and existence.
+
+6. **Test error paths:** Write tests that verify proper error handling, not just happy paths.
+
+**Most importantly:** Error handling isn't optional—it's a fundamental part of writing robust, production-ready code. Well-handled errors make applications more reliable, easier to debug, and provide better user experiences.
