@@ -3346,3 +3346,153 @@ The refactored version in [Pull Request #1](https://github.com/yjfvictor/Handlin
 6. **Test error paths:** Write tests that verify proper error handling, not just happy paths.
 
 **Most importantly:** Error handling isn't optional—it's a fundamental part of writing robust, production-ready code. Well-handled errors make applications more reliable, easier to debug, and provide better user experiences.
+
+---
+
+## 📝 Unit Testing for Clean Code
+
+### 🎯 Unit Testing Introduction
+
+Unit testing is the practice of writing tests for individual units of code (functions, methods, or classes) to verify they work correctly in isolation. This section explores how unit testing contributes to maintaining clean, reliable, and maintainable code.
+
+**Example Repository:** The code examples and unit tests discussed in this section are available in the [Writing-Unit-Tests-for-Clean-Code-Test](https://github.com/yjfvictor/Writing-Unit-Tests-for-Clean-Code-Test) repository. The sample code can be found at [unit-test-sample-code.js](https://github.com/yjfvictor/Writing-Unit-Tests-for-Clean-Code-Test/blob/main/unit-test-sample-code.js), and the corresponding unit tests are available at [unit-test-sample-code.test.js](https://github.com/yjfvictor/Writing-Unit-Tests-for-Clean-Code-Test/blob/main/unit-test-sample-code.test.js).
+
+### ✅ How Unit Tests Help Keep Code Clean
+
+#### 1. **Encourages Better Design**
+
+Writing unit tests forces developers to think about how code will be used and tested. This naturally leads to:
+
+- **Single Responsibility Principle:** Functions that do one thing are easier to test. When writing tests, you quickly realise if a function is doing too much.
+- **Loose Coupling:** To test units in isolation, dependencies must be injectable or mockable. This encourages dependency injection and reduces tight coupling.
+- **Clear Interfaces:** Testable code requires clear function signatures and well-defined inputs/outputs, making the code's purpose more obvious.
+
+#### 2. **Enables Confident Refactoring**
+
+Unit tests act as a safety net that allows developers to refactor code without fear of breaking existing functionality:
+
+- **Behaviour Preservation:** Tests verify that the external behaviour remains the same even when internal implementation changes.
+- **Regression Prevention:** When refactoring, tests immediately show if something breaks, allowing quick fixes before issues propagate.
+- **Code Evolution:** With tests in place, code can evolve and improve over time without accumulating technical debt.
+
+#### 3. **Serves as Living Documentation**
+
+Well-written unit tests document how code is supposed to work:
+
+- **Usage Examples:** Tests show how functions should be called and what to expect.
+- **Edge Cases:** Tests reveal how the code handles boundary conditions, invalid inputs, and error scenarios.
+- **Intent Clarification:** Test names and structure make the developer's intent clear to future maintainers.
+
+#### 4. **Early Bug Detection**
+
+Unit tests catch bugs early in the development cycle:
+
+- **Immediate Feedback:** Tests run quickly, providing instant feedback on whether code works as expected.
+- **Lower Cost:** Fixing bugs during development is much cheaper than fixing them in production.
+- **Isolation:** Unit tests help identify exactly which function or logic contains the bug, making debugging faster.
+
+#### 5. **Improves Code Quality**
+
+The discipline of writing tests leads to higher quality code:
+
+- **Input Validation:** Writing tests for edge cases encourages proper input validation and error handling.
+- **Completeness:** Tests help ensure all code paths are considered, including error handling and edge cases.
+- **Consistency:** Test-driven development (TDD) encourages writing code that meets requirements before implementation details are finalised.
+
+#### 6. **Facilitates Collaboration**
+
+Unit tests help teams work together more effectively:
+
+- **Confidence in Changes:** Team members can modify code knowing tests will catch any regressions.
+- **Onboarding:** New team members can understand code behaviour by reading tests.
+- **Code Reviews:** Tests provide context for reviewers to understand expected behaviour.
+
+### 🔍 Issues Found While Testing
+
+While writing unit tests for the sample code ([unit-test-sample-code.js](https://github.com/yjfvictor/Writing-Unit-Tests-for-Clean-Code-Test/blob/main/unit-test-sample-code.js)), several important issues and insights emerged:
+
+#### 1. **Missing Input Validation**
+
+Initially, some functions lacked proper input validation. Writing tests revealed that:
+
+- **Type Checking:** Functions needed to verify input types (e.g., ensuring arrays are actually arrays, numbers are numbers).
+- **Edge Cases:** Testing empty arrays, null values, and undefined inputs exposed the need for guard clauses.
+- **Error Messages:** Tests helped identify when error messages were too generic or not descriptive enough.
+
+**Example:** The `sumArray` function needed to check if the input is an array and if all elements are numbers. Without these checks, the function could fail silently or produce incorrect results.
+
+#### 2. **Inconsistent Error Handling**
+
+Testing revealed inconsistencies in how different functions handled errors:
+
+- **Error Types:** Some functions threw generic `Error` objects, while others could benefit from more specific error types.
+- **Error Messages:** Inconsistent error message formats made it harder to understand what went wrong.
+- **Error Conditions:** Not all functions handled the same edge cases (e.g., empty inputs) consistently.
+
+#### 3. **Boundary Condition Oversights**
+
+Writing comprehensive tests highlighted boundary conditions that weren't initially considered:
+
+- **Empty Collections:** Functions like `sumArray` and `findMax` needed explicit handling for empty arrays.
+- **Single Elements:** Arrays with one element needed special consideration in some cases.
+- **Zero and Negative Values:** Functions like `factorial` needed explicit handling for zero and negative inputs.
+
+#### 4. **Test Coverage Gaps**
+
+The process of writing tests revealed areas where the code could be improved:
+
+- **Happy Path Focus:** Initial implementation focused on the "happy path" but lacked comprehensive error handling.
+- **Edge Case Discovery:** Writing tests forced consideration of edge cases that might not have been thought of otherwise.
+- **Error Path Testing:** Testing error conditions helped identify missing validation and error handling.
+
+#### 5. **Code Clarity Improvements**
+
+Tests helped identify areas where code could be clearer:
+
+- **Function Names:** Some function names could be more descriptive based on how they were used in tests.
+- **Return Values:** Tests clarified what should be returned in edge cases (e.g., `null` vs `0` for empty arrays).
+- **Documentation:** Writing tests highlighted the need for better JSDoc comments explaining function behaviour.
+
+#### 6. **Refactoring Opportunities**
+
+While writing tests, opportunities for code improvement became apparent:
+
+- **Code Duplication:** Similar validation logic across functions could be extracted into helper functions.
+- **Complexity:** Some functions were more complex than necessary and could be simplified.
+- **Readability:** Tests helped identify code that was hard to understand and needed refactoring.
+
+### 🎓 Best Practices for Unit Testing
+
+Based on the experience of writing unit tests, here are key practices:
+
+#### ✅ Recommended Practices
+
+1. **Test One Thing at a Time:** Each test should verify one specific behaviour or condition.
+2. **Use Descriptive Test Names:** Test names should clearly describe what is being tested (e.g., `should return 1 for factorial of 0`).
+3. **Test Both Happy and Error Paths:** Don't just test the successful cases—test error handling and edge cases too.
+4. **Keep Tests Fast:** Unit tests should run quickly to enable frequent execution.
+5. **Test Behaviour, Not Implementation:** Tests should verify what functions do, not how they do it internally.
+6. **Arrange-Act-Assert Pattern:** Structure tests clearly with setup, execution, and verification phases.
+7. **Test Edge Cases:** Include tests for empty inputs, null values, boundary conditions, and invalid inputs.
+
+#### ❌ Practices to Avoid
+
+1. **Don't Test Implementation Details:** Tests should focus on public interfaces and behaviour, not internal implementation.
+2. **Avoid Flaky Tests:** Tests should be deterministic and not depend on external factors like timing or random values.
+3. **Don't Over-Mock:** Only mock what's necessary. Over-mocking makes tests brittle and harder to maintain.
+4. **Avoid Test Duplication:** Use test utilities and helpers to reduce duplication while keeping tests readable.
+5. **Don't Ignore Failing Tests:** Fix or remove failing tests—they undermine trust in the test suite.
+
+### 🎯 Unit Testing Key Takeaways
+
+1. **Unit tests are an investment:** The time spent writing tests pays off through fewer bugs, easier refactoring, and better code design.
+
+2. **Tests drive better code:** The process of writing tests reveals design issues, missing validation, and edge cases that need handling.
+
+3. **Tests provide confidence:** With comprehensive tests, developers can refactor and improve code without fear of breaking functionality.
+
+4. **Tests document behaviour:** Well-written tests serve as executable documentation that shows how code is intended to work.
+
+5. **Testing is iterative:** Writing tests often reveals issues that lead to code improvements, which then require updating tests—this is a healthy cycle.
+
+**Most importantly:** Unit testing isn't just about finding bugs—it's a practice that fundamentally improves code quality, design, and maintainability. Writing tests forces developers to think critically about their code, leading to cleaner, more robust, and more reliable software.
