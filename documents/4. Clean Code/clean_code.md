@@ -698,27 +698,29 @@ While there's no hard rule, consider these guidelines:
 
 ### 🌐 Real-World Example: Small, Focused Functions Repository
 
-For a comprehensive real-world example demonstrating the principles of writing small, focused functions, refer to the [small_focus_function_test](https://github.com/yjfvictor/small_focus_function_test) repository. This repository showcases:
+For a comprehensive real-world example demonstrating the principles of writing small, focused functions, refer to the [Writing-Small-Focused-Functions-Test](https://github.com/yjfvictor/Writing-Small-Focused-Functions-Test) repository. This repository showcases:
 
-Before Modification (Commit 988c551e0021f7f4f880fedd07277392e552f58c):
+Before Modification (Commit 817fd185c0bfc4e3f81b721c34bb151e457939ba):
 
-1. **Too many responsibilities:** The function handles user filtering, order validation, discount calculation, user level determination, tax calculation, and result formatting
-2. **Deep nesting:** Multiple levels of nested conditionals make it hard to follow the logic flow
-3. **Hard to test:** Testing requires setting up complex user and order structures
-4. **Difficult to debug:** When something goes wrong, it's hard to identify which part of the logic failed
-5. **Not reusable:** The logic is tightly coupled and can't be reused for other scenarios
-6. **Poor readability:** The function reads like a long story with many subplots
+1. **Too many responsibilities:** The `processOrder` function handles order validation, item processing, discount calculation, shipping calculation, tax calculation, payment processing, inventory updates, order creation, email sending, and response formatting—all in a single ~150-line function
+2. **Deep nesting:** Multiple levels of nested conditionals and loops make it hard to follow the logic flow
+3. **Hard to test:** Testing requires setting up complex order data, customer information, and payment details to test any single aspect of the process
+4. **Difficult to debug:** When something goes wrong, it's hard to identify which part of the logic failed (validation, calculation, payment, inventory, etc.)
+5. **Not reusable:** The logic is tightly coupled—you can't reuse the discount calculation or shipping logic elsewhere
+6. **Poor readability:** The function reads like a long procedural script with many mixed concerns
+7. **Mixed abstraction levels:** High-level orchestration mixed with low-level implementation details (e.g., regex validation inline with business logic)
 
-After Modification (<https://github.com/yjfvictor/small_focus_function_test/pull/1>):
+After Modification ([Pull Request #1](https://github.com/yjfvictor/Writing-Small-Focused-Functions-Test/pull/1), merged to commit 5f933cfd5b404bb87e0821a6f78fbedb40837188):
 
-1. **Single responsibility:** Each function now has one clear purpose
-2. **Readable flow:** The main function reads like a story: filter, map, filter
-3. **Easy to test:** Each function can be tested independently with simple inputs
-4. **Reusable components:** Functions like `calculateRegularTotal()` can be used elsewhere
-5. **No deep nesting:** Logic is flattened and easier to follow
-6. **Self-documenting:** Function names explain what each piece does
-7. **Easier to modify:** Want to change tax calculation? Only modify `calculateTax()`
-8. **Better error handling:** Errors can be traced to specific, small functions
+1. **Single responsibility:** Each function now has one clear purpose—validation functions validate, calculation functions calculate, and processing functions process
+2. **Readable orchestration:** The main `processOrder` function reads like a clear workflow: validate → process items → calculate → apply discounts → process payment → update inventory → save order → send email
+3. **Easy to test:** Each function can be tested independently with simple inputs (e.g., test `calculateShippingCost()` with just a subtotal value)
+4. **Reusable components:** Functions like `calculateSubtotal()`, `applyDiscount()`, and `calculateTax()` can be used in other contexts (returns, partial orders, etc.)
+5. **No deep nesting:** Logic is flattened into small, focused functions that are easy to follow
+6. **Self-documenting:** Function names like `validateOrderData()`, `processOrderItems()`, and `buildOrderRecord()` explain what each piece does
+7. **Easier to modify:** Want to change tax calculation? Only modify `calculateTax()`. Need different shipping rules? Only modify `calculateShippingCost()`
+8. **Better error handling:** Errors can be traced to specific, small functions (e.g., "validation failed in `validateCustomerInfo()`")
+9. **Organised by concern:** Functions are grouped logically (validation, item processing, calculations, payment, inventory, etc.) making the codebase easier to navigate
 
 Exploring this repository will provide additional context and help reinforce the function decomposition principles outlined above through real, working code examples.
 
