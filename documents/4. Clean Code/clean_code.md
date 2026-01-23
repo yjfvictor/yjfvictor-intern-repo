@@ -8,7 +8,7 @@ Clean code is code that is easy to understand, maintain, and extend. It follows 
 
 ## 📚 Core Principles
 
-### 1. Simplicity – Keep Code as Simple as Possible
+### 1. Simplicity: Keep Code as Simple as Possible
 
 **What it means:** Simple code is straightforward, avoids unnecessary complexity, and solves the problem at hand without over-engineering. The simplest solution that works is usually the best solution.
 
@@ -22,13 +22,13 @@ Clean code is code that is easy to understand, maintain, and extend. It follows 
 **Key practices:**
 
 - Avoid premature optimisation
-- Don't add features you don't need
+- Do not add features you do not need
 - Break complex problems into smaller, manageable pieces
 - Use clear, direct logic instead of clever tricks
 
 ---
 
-### 2. Readability – Code Should Be Easy to Understand
+### 2. Readability: Code Should Be Easy to Understand
 
 **What it means:** Code should read like well-written prose. Other developers (and your future self) should be able to understand what the code does without extensive comments or documentation.
 
@@ -48,7 +48,7 @@ Clean code is code that is easy to understand, maintain, and extend. It follows 
 
 ---
 
-### 3. Maintainability – Future Developers Should Work Easily with the Code
+### 3. Maintainability: Future Developers Should Work Easily with the Code
 
 **What it means:** Code should be structured in a way that makes it easy to modify, extend, and fix bugs without breaking existing functionality.
 
@@ -57,19 +57,19 @@ Clean code is code that is easy to understand, maintain, and extend. It follows 
 - Software requirements change over time
 - Bugs need to be fixed quickly
 - Features need to be added without breaking existing code
-- Team members come and go – code should outlive its authors
+- Team members come and go: code should outlive its authors
 
 **Key practices:**
 
 - Follow the Single Responsibility Principle (SRP)
 - Write modular, loosely-coupled code
 - Use version control effectively
-- Write tests to ensure changes don't break functionality
+- Write tests to ensure changes do not break functionality
 - Document architectural decisions and complex logic
 
 ---
 
-### 4. Consistency – Follow Style Guides and Project Conventions
+### 4. Consistency: Follow Style Guides and Project Conventions
 
 **What it means:** Code should follow established patterns, naming conventions, and formatting rules throughout the project. Consistency creates predictability and reduces mental overhead.
 
@@ -89,16 +89,16 @@ Clean code is code that is easy to understand, maintain, and extend. It follows 
 
 ---
 
-### 5. Efficiency – Write Performant, Optimised Code Without Premature Over-Engineering
+### 5. Efficiency: Write Performant, Optimised Code Without Premature Over-Engineering
 
-**What it means:** Code should be efficient and performant, but optimisation should be based on actual performance needs rather than assumptions. Avoid over-engineering solutions for problems that don't exist yet.
+**What it means:** Code should be efficient and performant, but optimisation should be based on actual performance needs rather than assumptions. Avoid over-engineering solutions for problems that do not exist yet.
 
 **Why it matters:**
 
 - Good performance improves user experience
 - Efficient code reduces resource consumption
 - Premature optimisation wastes time and adds complexity
-- Profile before optimising – measure, don't guess
+- Profile before optimising: measure rather than guess
 
 **Key practices:**
 
@@ -112,7 +112,7 @@ Clean code is code that is easy to understand, maintain, and extend. It follows 
 
 ## 🔴 Example: Messy Code
 
-Here's an example of messy, difficult-to-read code:
+Here is an example of messy, difficult-to-read code:
 
 ```javascript
 function calc(x,y,op){
@@ -141,7 +141,7 @@ function getTotal(orders){
 
 ### Why This Code is Difficult to Read
 
-1. **Poor naming:** Variables like `x`, `y`, `op`, `r`, `fn`, `ln`, `tot` are cryptic and don't describe their purpose
+1. **Poor naming:** Variables like `x`, `y`, `op`, `r`, `fn`, `ln`, `tot` are cryptic and do not describe their purpose
 2. **No spacing:** Everything is cramped together, making it hard to scan
 3. **Deep nesting:** Multiple nested conditions make logic flow hard to follow
 4. **Multiple responsibilities:** Functions do too many things at once
@@ -154,7 +154,7 @@ function getTotal(orders){
 
 ## ✅ Example: Clean Code
 
-Here's the same functionality rewritten using clean code principles:
+Here is the same functionality rewritten using clean code principles:
 
 ```javascript
 // Constants for better maintainability
@@ -292,11 +292,11 @@ One of the most impactful aspects of clean code is choosing clear, meaningful na
 - Be specific rather than generic
 - Use pronounceable names
 - Use searchable names (avoid single letters except for loop counters)
-- Choose one word per concept (don't mix `fetch`, `retrieve`, `get`)
+- Choose one word per concept (do not mix `fetch`, `retrieve`, `get`)
 
-**Don't:**
+**Do not:**
 
-- Use abbreviations unless they're widely understood (e.g., `ID`, `URL`, `HTTP`)
+- Use abbreviations unless they are widely understood (e.g., `ID`, `URL`, `HTTP`)
 - Use single letters except for short-lived loop counters
 - Include type information in the name (avoid `nameString`, `priceNumber`)
 - Use misleading names or puns
@@ -319,7 +319,7 @@ One of the most impactful aspects of clean code is choosing clear, meaningful na
 - Functions that transform data should describe the transformation
 - Keep function names at an appropriate level of abstraction
 
-**Don't:**
+**Do not:**
 
 - Use generic verbs like `process`, `handle`, `do`, `run` without context
 - Include implementation details in the name
@@ -365,7 +365,7 @@ const USER_ROLES = { ADMIN: 'admin', USER: 'user' };
 
 ### 🔴 Example: Code with Poor Naming
 
-Here's an example of code with unclear, poorly named variables and functions:
+Here is an example of code with unclear, poorly named variables and functions:
 
 ```javascript
 function proc(data) {
@@ -422,18 +422,18 @@ function chk(u, p) {
 ### Issues with This Code
 
 1. **Cryptic abbreviations:** `proc`, `temp`, `flag`, `cnt`, `obj`, `dt`, `diff`, `days`, `chk`, `u`, `p` – impossible to understand without reading the implementation
-2. **Generic names:** `data`, `arr`, `obj` don't describe what they contain
+2. **Generic names:** `data`, `arr`, `obj` do not describe what they contain
 3. **Unclear property names:** `d`, `s`, `b`, `n`, `e`, `a`, `v` are meaningless
-4. **Ambiguous function names:** `proc`, `calc`, `chk` don't describe what they do
-5. **Misleading names:** `flag` and `done` don't clearly indicate their purpose
+4. **Ambiguous function names:** `proc`, `calc`, `chk` do not describe what they do
+5. **Misleading names:** `flag` and `done` do not clearly indicate their purpose
 6. **Single-letter parameters:** `u`, `p` save typing but destroy readability
-7. **No context:** Variable names don't reveal business logic or domain concepts
+7. **No context:** Variable names do not reveal business logic or domain concepts
 
 ---
 
 ### ✅ Example: Refactored Code with Clear Naming
 
-Here's the same code refactored with meaningful, descriptive names:
+Here is the same code refactored with meaningful, descriptive names:
 
 ```javascript
 function findRecentActiveHighValueUsers(users) {
@@ -564,15 +564,15 @@ A good name should:
 
 2. **Be specific enough:** Provide sufficient context without being overly verbose
    - ✅ `customerEmailAddress` (if in a context where there might be other emails)
-   - ✅ `email` (if the context already makes it clear it's the customer's email)
+   - ✅ `email` (if the context already makes it clear it is the customer's email)
 
 3. **Follow conventions:** Stick to language and project conventions (camelCase for variables, verbs for functions, etc.)
 
-4. **Avoid ambiguity:** Don't use names that could mean multiple things
+4. **Avoid ambiguity:** Do not use names that could mean multiple things
    - ❌ `data`, `info`, `result` (too generic)
    - ✅ `userProfileData`, `orderSummary`, `calculationResult`
 
-5. **Be pronounceable:** If you can't say it out loud, it's probably too cryptic
+5. **Be pronounceable:** If you cannot say it out loud, it is probably too cryptic
    - ❌ `ymd`, `usrnm`, `pwd`
    - ✅ `yearMonthDay`, `username`, `password`
 
@@ -665,7 +665,7 @@ Small, focused functions are the building blocks of clean, maintainable code. Th
 - Use function composition to build complex behaviour from simple functions
 - Return early to reduce nesting and improve readability
 
-**Don't:**
+**Do not:**
 
 - Mix multiple levels of abstraction in a single function
 - Use long parameter lists (consider using objects or breaking the function down further)
@@ -682,7 +682,7 @@ While there's no hard rule, consider these guidelines:
 - **Large (31-50 lines):** Should be reviewed for extraction opportunities
 - **Very Large (50+ lines):** Almost always benefits from refactoring
 
-**Remember:** The goal isn't to hit a specific line count, but to create functions that are easy to understand, test, and modify.
+**Remember:** The goal is not to hit a specific line count, but to create functions that are easy to understand, test, and modify.
 
 #### Benefits of Small Functions
 
@@ -702,17 +702,17 @@ For a comprehensive real-world example demonstrating the principles of writing s
 
 Before Modification (Commit 817fd185c0bfc4e3f81b721c34bb151e457939ba):
 
-1. **Too many responsibilities:** The `processOrder` function handles order validation, item processing, discount calculation, shipping calculation, tax calculation, payment processing, inventory updates, order creation, email sending, and response formatting—all in a single ~150-line function
+1. **Too many responsibilities:** The `processOrder` function handles order validation, item processing, discount calculation, shipping calculation, tax calculation, payment processing, inventory updates, order creation, email sending, and response formatting, all in a single about 150-line function
 2. **Deep nesting:** Multiple levels of nested conditionals and loops make it hard to follow the logic flow
 3. **Hard to test:** Testing requires setting up complex order data, customer information, and payment details to test any single aspect of the process
-4. **Difficult to debug:** When something goes wrong, it's hard to identify which part of the logic failed (validation, calculation, payment, inventory, etc.)
-5. **Not reusable:** The logic is tightly coupled—you can't reuse the discount calculation or shipping logic elsewhere
+4. **Difficult to debug:** When something goes wrong, it is hard to identify which part of the logic failed (validation, calculation, payment, inventory, etc.)
+5. **Not reusable:** The logic is tightly coupled. You cannot reuse the discount calculation or shipping logic elsewhere
 6. **Poor readability:** The function reads like a long procedural script with many mixed concerns
 7. **Mixed abstraction levels:** High-level orchestration mixed with low-level implementation details (e.g., regex validation inline with business logic)
 
 After Modification ([Pull Request #1](https://github.com/yjfvictor/Writing-Small-Focused-Functions-Test/pull/1), merged to commit 5f933cfd5b404bb87e0821a6f78fbedb40837188):
 
-1. **Single responsibility:** Each function now has one clear purpose—validation functions validate, calculation functions calculate, and processing functions process
+1. **Single responsibility:** Each function now has one clear purpose, that is, validation functions validate, calculation functions calculate, and processing functions process
 2. **Readable orchestration:** The main `processOrder` function reads like a clear workflow: validate → process items → calculate → apply discounts → process payment → update inventory → save order → send email
 3. **Easy to test:** Each function can be tested independently with simple inputs (e.g., test `calculateShippingCost()` with just a subtotal value)
 4. **Reusable components:** Functions like `calculateSubtotal()`, `applyDiscount()`, and `calculateTax()` can be used in other contexts (returns, partial orders, etc.)
@@ -748,7 +748,7 @@ Breaking down large functions into smaller, focused ones offers numerous advanta
    - When bugs occur, you can quickly identify which small function is responsible
    - Debugging can be focused on a specific piece of logic
    - Stack traces are more meaningful with descriptive function names
-   - It's easier to add logging to specific functions
+   - It is easier to add logging to specific functions
 
 4. **Better Code Reuse**
    - Small, focused functions can be reused across different contexts
@@ -758,7 +758,7 @@ Breaking down large functions into smaller, focused ones offers numerous advanta
 
 5. **Simplified Maintenance**
    - Changes are localised to specific functions
-   - Modifying one part doesn't risk breaking unrelated functionality
+   - Modifying one part does not risk breaking unrelated functionality
    - Easier to understand the impact of changes
    - Code reviews focus on specific, small changes
 
@@ -769,7 +769,7 @@ Breaking down large functions into smaller, focused ones offers numerous advanta
    - Knowledge sharing is easier when code is well-structured
 
 7. **Reduced Cognitive Load**
-   - Developers don't need to hold the entire function in memory
+   - Developers do not need to hold the entire function in memory
    - Can focus on one small piece at a time
    - Mental models are simpler and more accurate
    - Less mental fatigue when working with the code
@@ -817,14 +817,14 @@ The refactoring transformed the code structure in several meaningful ways:
 7. **Flexibility and Extensibility**
    - **Before:** Adding new features required modifying the large function
    - **After:** New features can be added by composing existing functions or adding new small ones
-   - Changes are isolated and don't affect unrelated functionality
+   - Changes are isolated and do not affect unrelated functionality
 
 8. **Documentation Through Structure**
    - **Before:** Comments were needed to explain sections of the large function
    - **After:** Function names serve as documentation
    - The structure itself tells the story of the code
 
-**Key takeaway:** Small functions aren't just about reducing line count—they're about creating a codebase that is easier to understand, test, modify, and extend. The initial investment in breaking down functions pays off exponentially as the codebase grows and evolves.
+**Key takeaway:** Small functions are not just about reducing line count. They are about creating a codebase that is easier to understand, test, modify, and extend. The initial investment in breaking down functions pays off exponentially as the codebase grows and evolves.
 
 ---
 
@@ -891,7 +891,7 @@ The [Airbnb JavaScript Style Guide](https://github.com/airbnb/javascript) is one
    - Embrace modern syntax for clarity
 
 2. **Immutability and Predictability**
-   - Prefer `const` for all bindings that won't be reassigned
+   - Prefer `const` for all bindings that will not be reassigned
    - Avoid mutating function parameters
    - Use pure functions where possible
 
@@ -1108,7 +1108,7 @@ These issues were invisible in the cramped, poorly formatted version but became 
 
 ##### 4. Maintenance Confidence
 
-When code is properly formatted, I feel confident making changes. I can see exactly where to add a line, what scope I'm in, and what will be affected. In messy code, I'm constantly worried about breaking something because the structure is unclear.
+When code is properly formatted, I feel confident making changes. I can see exactly where to add a line, what scope I am in, and what will be affected. In messy code, I am constantly worried about breaking something because the structure is unclear.
 
 ##### 5. Cognitive Load Reduction
 
@@ -1125,7 +1125,7 @@ The linter caught **47 distinct issues** that I likely would have missed in a ma
 - **`var` usage** with function-scoping that could cause hoisting bugs
 - **Redundant comparisons** that indicate logical confusion
 
-These aren't just style issues – they're real bugs waiting to happen. The linter caught them before they could cause problems in production.
+These are not just style issues. In fact, they are real bugs waiting to happen. The linter caught them before they could cause problems in production.
 
 **Maintainability Issues (Important):**
 
@@ -1141,7 +1141,7 @@ These issues make the code harder to maintain and evolve over time.
 - **Mixed quote styles** that look unprofessional
 - **Inconsistent indentation** that obscures structure
 - **Missing semicolons** in a project that requires them
-- **Arrow function formatting** that doesn't match project standards
+- **Arrow function formatting** that does not match project standards
 
 While these might seem minor, they accumulate into a codebase that feels sloppy and inconsistent.
 
@@ -1157,7 +1157,7 @@ By delegating formatting decisions to tools, developers can focus on solving pro
 
 ##### 3. Prevention Over Correction
 
-Running linters before committing code prevents bad patterns from entering the codebase. It's far easier to fix issues immediately than to clean them up months later when technical debt has accumulated.
+Running linters before committing code prevents bad patterns from entering the codebase. It is far easier to fix issues immediately than to clean them up months later when technical debt has accumulated.
 
 ##### 4. Team Alignment
 
@@ -1225,18 +1225,18 @@ These metrics, drawn from industry studies, demonstrate that investing in toolin
 
 ### 🎯 Conclusion
 
-Code formatting is not optional for professional software development—it's foundational. The combination of style guides (like Airbnb's), linters (like ESLint), and formatters (like Prettier) creates a robust system for maintaining code quality at scale.
+Code formatting is not optional for professional software development; it is foundational. The combination of style guides (like Airbnb's), linters (like ESLint), and formatters (like Prettier) creates a robust system for maintaining code quality at scale.
 
 The exercise of analysing messy code and seeing the dramatic improvement after formatting reinforces several truths:
 
-1. **Formatting profoundly impacts readability** – clean code is dramatically easier to understand
-2. **Automated tools catch issues humans miss** – 47 issues in 75 lines would be impossible to catch manually
-3. **Standards enable collaboration** – consistent code looks professional and is easier to work with
-4. **Prevention is cheaper than correction** – catching issues early prevents technical debt
+1. **Formatting profoundly impacts readability**: clean code is dramatically easier to understand
+2. **Automated tools catch issues humans miss**: 47 issues in 75 lines would be impossible to catch manually
+3. **Standards enable collaboration**: consistent code looks professional and is easier to work with
+4. **Prevention is cheaper than correction**: catching issues early prevents technical debt
 
 As codebases grow and teams scale, these principles become even more critical. Investing in proper tooling and standards today prevents countless hours of confusion, debugging, and refactoring tomorrow.
 
-**Key takeaway:** Code formatting is not about aesthetics or personal preference. It's about creating a professional, maintainable, collaborative codebase that serves the team and organisation effectively. Embrace automated tooling, follow established standards, and watch code quality improve dramatically.
+**Key takeaway:** Code formatting is not about aesthetics or personal preference. It is about creating a professional, maintainable, collaborative codebase that serves the team and organisation effectively. Embrace automated tooling, follow established standards, and watch code quality improve dramatically.
 
 ---
 
@@ -1244,9 +1244,9 @@ As codebases grow and teams scale, these principles become even more critical. I
 
 ### 🎯 Understanding the DRY Principle
 
-The **"Don't Repeat Yourself" (DRY)** principle is a fundamental software development concept that states: **"Every piece of knowledge or logic within a system must have a single, unambiguous, and authoritative representation."**
+The **"Do not Repeat Yourself" (DRY)** principle is a fundamental software development concept that states: **"Every piece of knowledge or logic within a system must have a single, unambiguous, and authoritative representation."**
 
-First articulated by Andy Hunt and Dave Thomas in *The Pragmatic Programmer* (1999), the DRY principle goes beyond merely avoiding copy-pasted code—it's about eliminating **knowledge duplication** across your entire system, including code logic, database schemas, configuration files, documentation, and even development processes.
+First articulated by Andy Hunt and Dave Thomas in *The Pragmatic Programmer* (1999), the DRY principle goes beyond merely avoiding copy-pasted code; it is about eliminating **knowledge duplication** across your entire system, including code logic, database schemas, configuration files, documentation, and even development processes.
 
 ---
 
@@ -1282,7 +1282,7 @@ First articulated by Andy Hunt and Dave Thomas in *The Pragmatic Programmer* (19
 3. **Improves Testability**
    - Test shared logic once instead of testing duplicates
    - Tests are simpler and focus on specific functionality
-   - Higher confidence that changes don't break functionality
+   - Higher confidence that changes do not break functionality
 
 4. **Enhances Code Readability**
    - Reusable functions have descriptive names that document intent
@@ -1292,7 +1292,7 @@ First articulated by Andy Hunt and Dave Thomas in *The Pragmatic Programmer* (19
 5. **Enables Flexibility**
    - New features can compose existing utilities
    - Changes to business rules propagate automatically
-   - Adding capabilities doesn't require duplicating logic
+   - Adding capabilities does not require duplicating logic
 
 ---
 
@@ -1697,7 +1697,7 @@ function createEmailBody(username, content) {
  */
 function sendWelcomeEmail(user) {
   const subject = 'Welcome to Our Service!';
-  const content = "Welcome to our service! We're excited to have you.";
+  const content = "Welcome to our service! We are excited to have you.";
   const body = createEmailBody(user.username, content);
   
   sendEmail(user.email, subject, body);
@@ -1742,7 +1742,7 @@ Through this refactoring exercise, I identified several critical problems with c
 
 - Update line 9 in `createUser()`
 - Update line 56 in `updateUser()`
-- Hope we didn't miss any other locations
+- Hope we did not miss any other locations
 - Test both functions to ensure consistency
 
 ##### 2. Risk of Inconsistency
@@ -1756,11 +1756,11 @@ Through this refactoring exercise, I identified several critical problems with c
 - Bug reports become confusing: "It works here but not there"
 - Debugging takes exponentially longer
 
-**Example:** If `createUser()` is updated to enforce stricter password rules, but `updateUser()` isn't, users could:
+**Example:** If `createUser()` is updated to enforce stricter password rules, but `updateUser()` is not, users could:
 
 - Create accounts with weak passwords (blocked by new rules)
 - Update their profile to use weak passwords (not blocked by old rules)
-- Experience confusing error messages that don't match their experience
+- Experience confusing error messages that do not match their experience
 
 ##### 3. Testing Complexity
 
@@ -1796,7 +1796,7 @@ Through this refactoring exercise, I identified several critical problems with c
 - "Is this the only place this discount is calculated?"
 - "If I change this, what else breaks?"
 - "Are there other discount rates hardcoded elsewhere?"
-- These questions shouldn't exist in well-factored code
+- These questions should not exist in well-factored code
 
 ##### 5. Barrier to Change
 
@@ -1806,7 +1806,7 @@ Through this refactoring exercise, I identified several critical problems with c
 
 - Technical debt accumulates
 - Code quality degrades over time
-- "If it works, don't touch it" mentality develops
+- "If it works, do not touch it" mentality develops
 - Innovation slows as changes become too expensive
 
 **Example:** Changing the email sending mechanism from console logs to an actual email service would require:
@@ -1823,8 +1823,8 @@ Through this refactoring exercise, I identified several critical problems with c
 
 **Real Impact:**
 
-- Developers don't realise that two functions depend on the same business rule
-- Changes to business logic (e.g., discount rates) don't propagate
+- Developers do not realise that two functions depend on the same business rule
+- Changes to business logic (e.g., discount rates) do not propagate
 - System behaviour becomes unpredictable
 - Domain knowledge is scattered, not centralised
 
@@ -2006,7 +2006,7 @@ const DISCOUNTS = {
 **Impact:**
 
 - Adding features is **predictable** and **fast**
-- Technical debt doesn't accumulate
+- Technical debt does not accumulate
 - System scales with complexity
 - Long-term maintenance costs are **dramatically lower**
 
@@ -2022,8 +2022,8 @@ const DISCOUNTS = {
    - Same algorithm, same purpose, same behaviour
    - Example: Email validation used across multiple forms
 
-2. **You're copying and pasting**
-   - If you're copy-pasting code, that's a red flag
+2. **You are copying and pasting**
+   - If you are copy-pasting code, that is a red flag
    - Extract the duplicated logic immediately
 
 3. **Business rules are shared**
@@ -2039,7 +2039,7 @@ const DISCOUNTS = {
    - If extracting duplication makes code clearer, do it
    - Good abstractions reduce complexity
 
-#### ❌ DON'T Force DRY When
+#### ❌ Do not Force DRY When
 
 1. **Code looks similar but serves different purposes**
    - Example: Two functions that format dates differently for different contexts
@@ -2053,9 +2053,9 @@ const DISCOUNTS = {
    - If removing duplication requires complex conditionals or deep inheritance
    - Sometimes duplication is simpler than a bad abstraction
 
-4. **You're only seeing it twice**
+4. **You are only seeing it twice**
    - Wait for the third occurrence (Rule of Three)
-   - Premature abstraction often doesn't fit future use cases
+   - Premature abstraction often does not fit future use cases
 
 5. **Code is in different bounded contexts**
    - Example: User validation in authentication vs. user search
@@ -2068,8 +2068,8 @@ const DISCOUNTS = {
 This heuristic prevents premature abstractions:
 
 - **First occurrence:** Write straightforward code
-- **Second occurrence:** Note the similarity, but don't abstract yet
-- **Third occurrence:** Now you understand the pattern—refactor confidently
+- **Second occurrence:** Note the similarity, but do not abstract yet
+- **Third occurrence:** Now that you understand the pattern, refactor confidently
 
 **Why this works:** By the third occurrence, you have enough information to create a **correct abstraction** that fits all use cases, rather than a **premature abstraction** based on incomplete understanding.
 
@@ -2077,7 +2077,7 @@ This heuristic prevents premature abstractions:
 
 ### 🏆 Modern Perspective on DRY (2026)
 
-The software engineering community has evolved toward a more **pragmatic, balanced approach** to DRY:
+The software engineering community has evolved towards a more **pragmatic, balanced approach** to DRY:
 
 #### WET (Write Everything Twice)
 
@@ -2085,12 +2085,12 @@ Some modern developers advocate for **WET code** as a counter to overzealous DRY
 
 > "Duplication is far cheaper than the wrong abstraction." — Sandi Metz
 
-**Key insight:** It's easier to **refactor duplicated code later** than to **undo a complex but incorrect abstraction**. Some duplication is acceptable, especially when requirements are still evolving.
+**Key insight:** It is easier to **refactor duplicated code later** than to **undo a complex but incorrect abstraction**. Some duplication is acceptable, especially when requirements are still evolving.
 
 #### Balance with Other Principles
 
-- **KISS (Keep It Simple):** Don't create overly complex abstractions
-- **YAGNI (You Aren't Gonna Need It):** Don't build for hypothetical future needs
+- **KISS (Keep It Simple):** Do not create overly complex abstractions
+- **YAGNI (You Aren't Gonna Need It):** Do not build for hypothetical future needs
 - **Readability First:** If abstraction makes code harder to understand, consider duplication
 
 #### Domain-Driven Design (DDD)
@@ -2101,7 +2101,7 @@ In DDD, **duplication across bounded contexts is often preferable** to forced sh
 - Sharing code across contexts creates unwanted coupling
 - Each context should be independently evolvable
 
-**Example:** `User` in authentication context vs. `User` in analytics context—they may look similar but serve different purposes and should not share code.
+**Example:** `User` in authentication context vs. `User` in analytics context, where they may look similar but serve different purposes and should not share code.
 
 ---
 
@@ -2112,7 +2112,7 @@ In DDD, **duplication across bounded contexts is often preferable** to forced sh
    - Ask: "If this business rule changes, how many places need updating?"
 
 2. **Use the Rule of Three**
-   - Don't abstract until you see the pattern at least three times
+   - Do not abstract until you see the pattern at least three times
    - Early abstractions are often incorrect
 
 3. **Create Meaningful Abstractions**
@@ -2136,9 +2136,9 @@ In DDD, **duplication across bounded contexts is often preferable** to forced sh
    - Prioritise code clarity over strict DRY adherence
 
 7. **Refactor Incrementally**
-   - Don't try to eliminate all duplication at once
-   - Fix duplication when you're already working in that area
-   - Use tests to ensure refactoring doesn't break functionality
+   - Do not try to eliminate all duplication at once
+   - Fix duplication when you are already working in that area
+   - Use tests to ensure refactoring does not break functionality
 
 8. **Document Your Abstractions**
    - Explain the purpose of utility functions
@@ -2182,11 +2182,11 @@ The DRY principle is one of the most powerful tools for creating maintainable so
 5. **The Rule of Three works:** Wait to see patterns emerge before abstracting
 6. **Consistency prevents bugs:** Single sources of truth eliminate entire classes of bugs
 
-**Most importantly:** DRY is not about reducing line count—the refactored code is actually longer (247 → 312 lines). DRY is about **reducing knowledge duplication** and creating **maintainable, consistent, flexible systems**.
+**Most importantly:** DRY is not about reducing line count. The refactored code is actually longer (247 → 312 lines). DRY is about **reducing knowledge duplication** and creating **maintainable, consistent, flexible systems**.
 
 When applied thoughtfully, the DRY principle transforms messy, fragile codebases into clean, robust, maintainable systems that can evolve with changing requirements.
 
-**Final reflection:** The hardest part of DRY is recognising duplication in the first place. Train yourself to notice when you're copy-pasting, when magic numbers appear multiple times, or when similar logic exists in multiple places. Once you see it, refactoring becomes straightforward—and the benefits are immediate and lasting.
+**Final reflection:** The hardest part of DRY is recognising duplication in the first place. Train yourself to notice when you are copy-pasting, when magic numbers appear multiple times, or when similar logic exists in multiple places. Once you see it, refactoring becomes straightforward, and the benefits are immediate and lasting.
 
 ---
 
@@ -2194,7 +2194,7 @@ When applied thoughtfully, the DRY principle transforms messy, fragile codebases
 
 ### 🎯 Understanding Refactoring for Simplicity
 
-Refactoring is the process of improving code structure and design without changing its external behaviour. When refactoring for simplicity, the goal is to reduce complexity, improve readability, and make code easier to understand and maintain—all while preserving functionality.
+Refactoring is the process of improving code structure and design without changing its external behaviour. When refactoring for simplicity, the goal is to reduce complexity, improve readability, and make code easier to understand and maintain, all while preserving functionality.
 
 ---
 
@@ -2219,7 +2219,7 @@ Based on industry best practices and modern software engineering principles, her
 
 **Purpose:** Use descriptive, intention-revealing names that explain what the code does.
 
-**When to use:** When variable or function names don't clearly communicate their purpose.
+**When to use:** When variable or function names do not clearly communicate their purpose.
 
 **Benefits:**
 
@@ -2366,7 +2366,7 @@ Through this refactoring exercise, I identified several factors that contributed
 
 ##### 2. Too Many Responsibilities in One Place
 
-**The Problem:** The `processOrders` method (and the class as a whole) handles validation, transformation, pricing, discounts, error handling, statistics, and response building—all in one place.
+**The Problem:** The `processOrders` method (and the class as a whole) handles validation, transformation, pricing, discounts, error handling, statistics, and response building, all in one place.
 
 **Impact:**
 
@@ -2375,7 +2375,7 @@ Through this refactoring exercise, I identified several factors that contributed
 - Changes to one concern risk breaking others
 - Code reviews are overwhelming
 
-**Example:** The `processOrders` method orchestrates validation, transformation, pricing calculation, discount application, completion checks, error handling, and statistics updates—all in a single method chain.
+**Example:** The `processOrders` method orchestrates validation, transformation, pricing calculation, discount application, completion checks, error handling, and statistics updates, all in a single method chain.
 
 ##### 3. Complex Nested Conditionals and Logic
 
@@ -2401,7 +2401,7 @@ Through this refactoring exercise, I identified several factors that contributed
 - Harder to reason about code behaviour
 - Unnecessary memory usage
 
-**Example:** The class tracks `processingStartTime`, `processingEndTime`, `totalProcessingTime`, success/failure counts, total value, average order value, and more—most of which aren't needed for basic order processing.
+**Example:** The class tracks `processingStartTime`, `processingEndTime`, `totalProcessingTime`, success/failure counts, total value, average order value, and more, most of which are not needed for basic order processing.
 
 ##### 5. Overly Generic Options and Configuration
 
@@ -2414,7 +2414,7 @@ Through this refactoring exercise, I identified several factors that contributed
 - More code paths to test
 - Configuration complexity
 
-**Example:** The `processOrders` method accepts an `options` object with properties like `strictMode`, `requireMinimumValue`, `skipInvalidCustomers`, `includeDetails`, `includeStatistics`, `includeMetadata`, `taxRate`, `applyFees`, `adjustments`, and `promotionalCode`—creating many possible code paths.
+**Example:** The `processOrders` method accepts an `options` object with properties like `strictMode`, `requireMinimumValue`, `skipInvalidCustomers`, `includeDetails`, `includeStatistics`, `includeMetadata`, `taxRate`, `applyFees`, `adjustments`, and `promotionalCode`, which create many possible code paths.
 
 ##### 6. Deep Method Chains and Indirection
 
@@ -2427,7 +2427,7 @@ Through this refactoring exercise, I identified several factors that contributed
 - Unclear dependencies
 - More mental overhead
 
-**Example:** `processOrders` → `performComprehensiveValidation` → `transformAndEnrichOrder` → `calculateComplexPricing` → `applyMultiLevelDiscounts` → `shouldCompleteOrder` → `updateStatistics` → `finalizeProcessing` → `buildResponse`—a long chain that's hard to follow.
+**Example:** `processOrders` → `performComprehensiveValidation` → `transformAndEnrichOrder` → `calculateComplexPricing` → `applyMultiLevelDiscounts` → `shouldCompleteOrder` → `updateStatistics` → `finalizeProcessing` → `buildResponse`. This is a long chain that is hard to follow.
 
 ##### 7. Mixed Concerns and Responsibilities
 
@@ -2440,7 +2440,7 @@ Through this refactoring exercise, I identified several factors that contributed
 - Testing requires complex setup
 - Code reviews are difficult
 
-**Example:** The class mixes order processing logic with statistics tracking, error handling, metadata management, and response formatting—concerns that should be separated.
+**Example:** The class mixes order processing logic with statistics tracking, error handling, metadata management, and response formatting. It concerns that should be separated.
 
 ---
 
@@ -2649,14 +2649,14 @@ const fee = calculateFee(order.items.length);
 ### 🎓 Key Takeaways from Refactoring
 
 1. **Simplicity beats cleverness:** The simplest solution that works is usually the best
-2. **Functions over classes:** When you don't need state, use functions
+2. **Functions over classes:** When you do not need state, use functions
 3. **Single responsibility:** Each function should do one thing well
 4. **Extract constants:** Magic numbers and strings should be named constants
 5. **Linear flow:** Code should read top-to-bottom, not require mental jumping
-6. **Remove unnecessary code:** If it's not needed, remove it
+6. **Remove unnecessary code:** If it is not needed, remove it
 7. **Test simplicity:** Simple code is easier to test
 
-**Most importantly:** Refactoring for simplicity is not about making code shorter—it's about making code **easier to understand**. The refactored code is actually more explicit in some ways (separate functions instead of one large method), but it's dramatically easier to read, test, and maintain.
+**Most importantly:** Refactoring for simplicity is not about making code shorter. It is about making code **easier to understand**. The refactored code is actually more explicit in some ways (separate functions instead of one large method), but it is dramatically easier to read, test, and maintain.
 
 **Final reflection:** The hardest part of refactoring for simplicity is recognising when code is over-engineered. Ask yourself: "Does this abstraction make the code clearer, or does it add complexity?" If it adds complexity without clear benefit, simplify it. The goal is code that a developer can understand quickly, not code that demonstrates advanced patterns or techniques.
 
@@ -2666,7 +2666,7 @@ const fee = calculateFee(order.items.length);
 
 ### 🎯 Understanding Comments and Documentation
 
-Comments and documentation serve a crucial role in software development, but they must be used judiciously. The goal is to provide clarity where code alone cannot express intent, rationale, or important constraints—not to restate what the code already makes obvious.
+Comments and documentation serve a crucial role in software development, but they must be used judiciously. The goal is to provide clarity where code alone cannot express intent, rationale, or important constraints, not to restate what the code already makes obvious.
 
 ---
 
@@ -2729,10 +2729,10 @@ The original code ([commit `95d4d38fe801dbc879afa0b5d81bd49c764dade1`](https://g
 **Key Issues:**
 
 1. **Redundant Comments:** Comments like `// Add`, `// Subtract`, `// Return result` simply restate what the code already says
-2. **Vague Descriptions:** Comments like "This function does stuff" and "Process users" don't explain purpose or behaviour
+2. **Vague Descriptions:** Comments like "This function does stuff" and "Process users" do not explain purpose or behaviour
 3. **No Parameter Documentation:** Parameters have no explanation of valid values or constraints
-4. **No Error Documentation:** Error cases aren't documented
-5. **Poor Variable Names:** Cryptic names like `calc`, `proc`, `x`, `y`, `u` obscure intent—better names would eliminate the need for many comments
+4. **No Error Documentation:** Error cases are not documented
+5. **Poor Variable Names:** Cryptic names like `calc`, `proc`, `x`, `y`, `u` obscure intent; better names would eliminate the need for many comments
 6. **Missing Context:** No explanation of business rules (why age >= 18? what does 'active' mean?)
 
 #### After: Well-Commented Code with Doxygen
@@ -2752,7 +2752,7 @@ The refactored version ([Pull Request #1](https://github.com/yjfvictor/Commentin
 
 This repository showcases:
 
-- **Before (with poor comments):** Code with redundant, vague, and unhelpful comments that don't add value
+- **Before (with poor comments):** Code with redundant, vague, and unhelpful comments that do not add value
 - **After (with Doxygen documentation):** Well-documented code using Doxygen-style comments that provide comprehensive API documentation
 - **Clear transformation:** Step-by-step refactoring showing how to improve both code quality and documentation
 - **Practical examples:** Real-world code demonstrating the principles discussed in this document
@@ -2769,7 +2769,7 @@ Comments are appropriate and valuable in the following situations:
 
 ##### 1. Explaining Intent and Rationale
 
-**When to use:** When the *why* behind code isn't obvious from the code itself.
+**When to use:** When the *why* behind code is not obvious from the code itself.
 
 **Example:**
 
@@ -2780,18 +2780,18 @@ Comments are appropriate and valuable in the following situations:
 const timeout = 5000;
 ```
 
-**Why it's needed:** The code shows *what* (5000ms timeout), but not *why* (API performance during peak hours). This rationale helps future developers understand the decision.
+**Why it is needed:** The code shows *what* (5000ms timeout), but not *why* (API performance during peak hours). This rationale helps future developers understand the decision.
 
 ##### 2. Documenting Non-Obvious Behaviour or Edge Cases
 
-**When to use:** When code behaves in ways that aren't immediately apparent.
+**When to use:** When code behaves in ways that are not immediately apparent.
 
 **Example:**
 
 ```javascript
 /**
  * @brief Calculates discount with special handling for edge cases
- * @details If the discount percentage exceeds 100%, it's capped at 100% to prevent
+ * @details If the discount percentage exceeds 100%, it is capped at 100% to prevent
  * negative prices. Additionally, if the original price is already zero or negative,
  * the function returns 0 to avoid invalid calculations.
  * @param {number} originalPrice The original price before discount
@@ -2811,7 +2811,7 @@ function calculateDiscountedPrice(originalPrice, discountPercent) {
 }
 ```
 
-**Why it's needed:** The edge case handling (capping at 100%, handling zero/negative prices) isn't obvious from the function name or basic logic. Documentation explains these important constraints.
+**Why it is needed:** The edge case handling (capping at 100%, handling zero/negative prices) is not obvious from the function name or basic logic. Documentation explains these important constraints.
 
 ##### 3. Public API Documentation
 
@@ -2836,7 +2836,7 @@ function validateUserCredentials(username, password) {
 }
 ```
 
-**Why it's needed:** Public APIs need comprehensive documentation so external developers can use them correctly without reading implementation details.
+**Why it is needed:** Public APIs need comprehensive documentation so external developers can use them correctly without reading implementation details.
 
 ##### 4. Documenting Workarounds and Limitations
 
@@ -2847,7 +2847,7 @@ function validateUserCredentials(username, password) {
 ```javascript
 /**
  * @brief Formats date for display, with workaround for Safari date parsing
- * @details Safari's Date constructor doesn't support ISO 8601 date strings without
+ * @details Safari's Date constructor does not support ISO 8601 date strings without
  * time components. This function converts the date string to a format Safari can parse.
  * @note This is a workaround for Safari's date parsing bug. Once Safari fixes this
  * issue, this function can be simplified.
@@ -2862,11 +2862,11 @@ function parseDateForSafari(dateString) {
 }
 ```
 
-**Why it's needed:** Workarounds are often confusing without explanation. Documentation helps future developers understand why the workaround exists and when it can be removed.
+**Why it is needed:** Workarounds are often confusing without explanation. Documentation helps future developers understand why the workaround exists and when it can be removed.
 
 ##### 5. Warning About Consequences or Side Effects
 
-**When to use:** When code has important side effects or consequences that aren't obvious.
+**When to use:** When code has important side effects or consequences that are not obvious.
 
 **Example:**
 
@@ -2883,7 +2883,7 @@ async function clearCache(clearUserSessions = false) {
 }
 ```
 
-**Why it's needed:** Side effects like invalidating user sessions aren't obvious from the function name. Documentation prevents accidental misuse.
+**Why it is needed:** Side effects like invalidating user sessions are not obvious from the function name. Documentation prevents accidental misuse.
 
 ##### 6. Legal and Meta Information
 
@@ -2901,7 +2901,7 @@ async function clearCache(clearUserSessions = false) {
  */
 ```
 
-**Why it's needed:** Legal requirements and attribution are important for open-source projects and corporate codebases.
+**Why it is needed:** Legal requirements and attribution are important for open-source projects and corporate codebases.
 
 ---
 
@@ -2938,7 +2938,7 @@ if (user.status === 'active') {
 }
 ```
 
-**Why:** Redundant comments add noise without value. They must be maintained alongside code and can become misleading if code changes but comments don't.
+**Why:** Redundant comments add noise without value. They must be maintained alongside code and can become misleading if code changes but comments do not.
 
 ##### 2. Comments Explaining What a Function Does (When Function Name Should Explain It)
 
@@ -3116,8 +3116,8 @@ test('processItems returns empty array for null input', () => {
 #### Do's ✅
 
 1. **Document public APIs** with comprehensive Doxygen-style comments
-2. **Explain intent and rationale** when code doesn't make the "why" obvious
-3. **Document edge cases and constraints** that aren't apparent from code
+2. **Explain intent and rationale** when code does not make the "why" obvious
+3. **Document edge cases and constraints** that are not apparent from code
 4. **Use `@warning` and `@note`** for important caveats or limitations
 5. **Provide usage examples** with `@example` for complex functions
 6. **Document workarounds** with explanations and links to bug reports
@@ -3125,13 +3125,13 @@ test('processItems returns empty array for null input', () => {
 
 #### Don'ts ❌
 
-1. **Don't restate what code already says**—if code is clear, no comment needed
-2. **Don't use comments to explain bad code**—refactor instead
-3. **Don't leave commented-out code**—use version control for history
-4. **Don't write journal-style comments**—version control tracks changes
-5. **Don't comment obvious variable names**—use better names instead
-6. **Don't use comments as a substitute for tests**—write tests for behaviour
-7. **Don't write misleading or outdated comments**—they're worse than no comments
+1. **Do not restate what code already says**: if code is clear, no comment needed
+2. **Do not use comments to explain bad code**: refactor instead
+3. **Do not leave commented-out code**: use version control for history
+4. **Do not write journal-style comments**: version control tracks changes
+5. **Do not comment obvious variable names**: use better names instead
+6. **Do not use comments as a substitute for tests**: write tests for behaviour
+7. **Do not write misleading or outdated comments**: they are worse than no comments
 
 ---
 
@@ -3149,7 +3149,7 @@ test('processItems returns empty array for null input', () => {
 
 6. **Maintain comments like code:** Outdated comments are worse than no comments. If you change code, update or remove related comments.
 
-**Most importantly:** The best comment is the one you don't need to write. Strive for code so clear and well-named that comments become unnecessary for explaining *what* the code does. Reserve comments for explaining *why* decisions were made, documenting public APIs, and warning about non-obvious behaviour or constraints.
+**Most importantly:** The best comment is the one you do not need to write. Strive for code so clear and well-named that comments become unnecessary for explaining *what* the code does. Reserve comments for explaining *why* decisions were made, documenting public APIs, and warning about non-obvious behaviour or constraints.
 
 ---
 
@@ -3202,7 +3202,7 @@ function processData(data) {
 - **Type checking:** Verify that inputs match expected types
 - **Range validation:** Check numeric values are within acceptable ranges
 - **Null/undefined checks:** Handle missing or uninitialised values
-- **Empty collection checks:** Validate arrays, objects, and strings aren't empty when required
+- **Empty collection checks:** Validate arrays, objects, and strings are not empty when required
 
 #### 3. Custom Error Classes
 
@@ -3222,7 +3222,7 @@ class ValidationError extends Error {
 **Best Practices:**
 
 - **Scope narrowly:** Only wrap code that might throw errors
-- **Don't swallow errors:** Always log or handle errors appropriately
+- **Do not swallow errors:** Always log or handle errors appropriately
 - **Use finally for cleanup:** Ensure resources are released even if errors occur
 
 ---
@@ -3241,7 +3241,7 @@ This section compares code from the repository [Handling-Errors-and-Edge-Cases-T
 The original code in commit [`765e17a185c14306574c4506b6b405093ae34233`](https://github.com/yjfvictor/Handling-Errors-and-Edge-Cases-Test/commit/765e17a185c14306574c4506b6b405093ae34233) demonstrates several critical problems:
 
 1. **No input validation:**
-   - `calculateAverageScore()` doesn't check if `scores` is an array or if it's empty
+   - `calculateAverageScore()` does not check if `scores` is an array or if it is empty
    - No validation that scores are numbers or within valid ranges
    - No check if `totalPossible` is a valid positive number
 
@@ -3260,8 +3260,8 @@ The original code in commit [`765e17a185c14306574c4506b6b405093ae34233`](https:/
 
 5. **No edge case handling:**
    - Empty arrays cause division by zero
-   - Negative scores or scores exceeding total possible points aren't caught
-   - Empty strings in names aren't validated
+   - Negative scores or scores exceeding total possible points are not caught
+   - Empty strings in names are not validated
 
 #### Improvements in the Refactored Code (PR #1, Commit `bbef5ec`)
 
@@ -3322,12 +3322,12 @@ The refactored version in [Pull Request #1](https://github.com/yjfvictor/Handlin
 
 #### Practices to Avoid ❌
 
-1. **Don't ignore errors:** Always handle or propagate errors appropriately
-2. **Don't use bare catch blocks:** Never suppress errors without logging or handling
-3. **Don't delay validation:** Check inputs early, not deep in nested logic
-4. **Don't return invalid values:** Throw errors instead of returning `NaN` or `undefined`
-5. **Don't assume inputs are valid:** Always validate, even for internal functions
-6. **Don't write overly broad try-catch:** Only catch errors you can meaningfully handle
+1. **Do not ignore errors:** Always handle or propagate errors appropriately
+2. **Do not use bare catch blocks:** Never suppress errors without logging or handling
+3. **Do not delay validation:** Check inputs early, not deep in nested logic
+4. **Do not return invalid values:** Throw errors instead of returning `NaN` or `undefined`
+5. **Do not assume inputs are valid:** Always validate, even for internal functions
+6. **Do not write overly broad try-catch:** Only catch errors you can meaningfully handle
 
 ---
 
@@ -3341,11 +3341,11 @@ The refactored version in [Pull Request #1](https://github.com/yjfvictor/Handlin
 
 4. **Think about edge cases:** Consider empty inputs, null values, boundary conditions, and invalid types.
 
-5. **Validate everything:** Don't trust inputs, even from internal functions. Validate types, ranges, and existence.
+5. **Validate everything:** Do not trust inputs, even from internal functions. Validate types, ranges, and existence.
 
 6. **Test error paths:** Write tests that verify proper error handling, not just happy paths.
 
-**Most importantly:** Error handling isn't optional—it's a fundamental part of writing robust, production-ready code. Well-handled errors make applications more reliable, easier to debug, and provide better user experiences.
+**Most importantly:** Error handling is not optional. It is a fundamental part of writing robust, production-ready code. Well-handled errors make applications more reliable, easier to debug, and provide better user experiences.
 
 ---
 
@@ -3355,7 +3355,7 @@ The refactored version in [Pull Request #1](https://github.com/yjfvictor/Handlin
 
 Unit testing is the practice of writing tests for individual units of code (functions, methods, or classes) to verify they work correctly in isolation. This section explores how unit testing contributes to maintaining clean, reliable, and maintainable code.
 
-**Example Repository:** The code examples and unit tests discussed in this section are available in the [Writing-Unit-Tests-for-Clean-Code-Test](https://github.com/yjfvictor/Writing-Unit-Tests-for-Clean-Code-Test) repository. The sample code can be found at [unit-test-sample-code.js](https://github.com/yjfvictor/Writing-Unit-Tests-for-Clean-Code-Test/blob/main/unit-test-sample-code.js), and the corresponding unit tests are available at [unit-test-sample-code.test.js](https://github.com/yjfvictor/Writing-Unit-Tests-for-Clean-Code-Test/blob/main/unit-test-sample-code.test.js).
+**Example Repository:** The code examples and unit tests discussed in this section are available in the [Writing-Unit-Tests-for-Clean-Code-Test](https://github.com/yjfvictor/Writing-Unit-Tests-for-Clean-Code-Test) repository, which I created to demonstrate unit testing practices. The sample code can be found at [unit-test-sample-code.js](https://github.com/yjfvictor/Writing-Unit-Tests-for-Clean-Code-Test/blob/main/unit-test-sample-code.js), and the corresponding unit tests are available at [unit-test-sample-code.test.js](https://github.com/yjfvictor/Writing-Unit-Tests-for-Clean-Code-Test/blob/main/unit-test-sample-code.test.js).
 
 ### ✅ How Unit Tests Help Keep Code Clean
 
@@ -3431,7 +3431,7 @@ Testing revealed inconsistencies in how different functions handled errors:
 
 #### 3. **Boundary Condition Oversights**
 
-Writing comprehensive tests highlighted boundary conditions that weren't initially considered:
+Writing comprehensive tests highlighted boundary conditions that were not initially considered:
 
 - **Empty Collections:** Functions like `sumArray` and `findMax` needed explicit handling for empty arrays.
 - **Single Elements:** Arrays with one element needed special consideration in some cases.
@@ -3469,7 +3469,7 @@ Based on the experience of writing unit tests, here are key practices:
 
 1. **Test One Thing at a Time:** Each test should verify one specific behaviour or condition.
 2. **Use Descriptive Test Names:** Test names should clearly describe what is being tested (e.g., `should return 1 for factorial of 0`).
-3. **Test Both Happy and Error Paths:** Don't just test the successful cases—test error handling and edge cases too.
+3. **Test Both Happy and Error Paths:** Do not just test the successful cases. Test error handling and edge cases too.
 4. **Keep Tests Fast:** Unit tests should run quickly to enable frequent execution.
 5. **Test Behaviour, Not Implementation:** Tests should verify what functions do, not how they do it internally.
 6. **Arrange-Act-Assert Pattern:** Structure tests clearly with setup, execution, and verification phases.
@@ -3477,11 +3477,82 @@ Based on the experience of writing unit tests, here are key practices:
 
 #### ❌ Practices to Avoid
 
-1. **Don't Test Implementation Details:** Tests should focus on public interfaces and behaviour, not internal implementation.
+1. **Do not Test Implementation Details:** Tests should focus on public interfaces and behaviour, not internal implementation.
 2. **Avoid Flaky Tests:** Tests should be deterministic and not depend on external factors like timing or random values.
-3. **Don't Over-Mock:** Only mock what's necessary. Over-mocking makes tests brittle and harder to maintain.
+3. **Do not Over-Mock:** Only mock what is necessary. Over-mocking makes tests brittle and harder to maintain.
 4. **Avoid Test Duplication:** Use test utilities and helpers to reduce duplication while keeping tests readable.
-5. **Don't Ignore Failing Tests:** Fix or remove failing tests—they undermine trust in the test suite.
+5. **Do not Ignore Failing Tests:** Fix or remove failing tests. They undermine trust in the test suite.
+
+### 💭 Personal Reflection on Unit Testing
+
+#### Testing Framework Selection: Jest
+
+After reviewing the [Writing-Unit-Tests-for-Clean-Code-Test](https://github.com/yjfvictor/Writing-Unit-Tests-for-Clean-Code-Test) repository I created, I selected **Jest** as the testing framework (version 29.7.0). I chose Jest for several reasons:
+
+1. **Industry Standard:** Jest is one of the most popular and widely-used testing frameworks in the JavaScript ecosystem, making it a practical choice for real-world projects.
+
+2. **Zero Configuration:** Jest works out of the box with minimal setup, which allowed me to focus on writing tests rather than configuring the testing environment.
+
+3. **Rich Feature Set:** Jest provides built-in assertion library, mocking capabilities, code coverage reports, and watch mode for rapid development feedback.
+
+4. **Excellent Documentation:** Jest has comprehensive documentation and a large community, making it easy to find solutions and best practices.
+
+5. **Node.js Compatibility:** Since the sample code uses CommonJS modules (`module.exports`), Jest handles this seamlessly without additional configuration.
+
+#### How Writing Unit Tests Helped Me Understand and Clean Up My Code
+
+Writing unit tests for my sample code was an eye-opening experience that fundamentally changed how I approach code development. The process revealed several important insights:
+
+##### Forced Me to Think About Edge Cases
+
+When I first wrote the `sumArray` function, I focused on the "happy path", that is, summing arrays of numbers. However, when writing tests, I immediately thought: "What if someone passes an empty array? What if they pass non-numeric values? What if they pass `null` or `undefined`?" This led me to add proper input validation and error handling that I hadn't initially considered.
+
+##### Revealed Design Flaws
+
+Writing tests for `isPalindrome` made me realise that my initial implementation did not handle case-insensitive comparisons or ignore non-alphanumeric characters. The test cases I wrote forced me to refine the function to handle real-world scenarios like "A man a plan a canal Panama" correctly.
+
+##### Improved Code Clarity
+
+The process of writing descriptive test names (e.g., `should return 1 for factorial of 0`) made me think more carefully about what each function should actually do. This clarity translated back to the implementation code, making it more readable and maintainable.
+
+##### Created Living Documentation
+
+The tests serve as executable documentation. Anyone reading the test file can immediately understand how each function should behave, what inputs are expected, and what outputs to anticipate. This is especially valuable for functions like `factorial` where edge cases (zero, negative numbers) need explicit handling.
+
+#### Specific Issue Discovered While Testing
+
+One specific issue I discovered while writing tests was in the `findMax` function. Initially, I had written:
+
+```javascript
+function findMax(numbers) {
+  return Math.max(...numbers);
+}
+```
+
+When I wrote a test for an empty array, I realised this would throw an error because `Math.max()` with no arguments returns `-Infinity`, which is not the desired behaviour. This led me to:
+
+1. **Add input validation** to check if the array is empty and return `null` appropriately.
+2. **Add type checking** to ensure the input is actually an array.
+3. **Add validation** to ensure all elements are numbers.
+
+The final implementation became:
+
+```javascript
+function findMax(numbers) {
+  if (!Array.isArray(numbers)) {
+    throw new Error('Input must be an array');
+  }
+  if (numbers.length === 0) {
+    return null;
+  }
+  if (!numbers.every(num => typeof num === 'number' && !isNaN(num))) {
+    throw new Error('Array must contain only numbers');
+  }
+  return Math.max(...numbers);
+}
+```
+
+This issue taught me that writing tests is not just about verifying code works. It is about discovering what the code *should* do in all scenarios, including edge cases that might not be immediately obvious. The test-driven approach helped me write more robust, production-ready code.
 
 ### 🎯 Unit Testing Key Takeaways
 
@@ -3493,6 +3564,6 @@ Based on the experience of writing unit tests, here are key practices:
 
 4. **Tests document behaviour:** Well-written tests serve as executable documentation that shows how code is intended to work.
 
-5. **Testing is iterative:** Writing tests often reveals issues that lead to code improvements, which then require updating tests—this is a healthy cycle.
+5. **Testing is iterative:** Writing tests often reveals issues that lead to code improvements, which then require updating tests. This is a healthy cycle.
 
-**Most importantly:** Unit testing isn't just about finding bugs—it's a practice that fundamentally improves code quality, design, and maintainability. Writing tests forces developers to think critically about their code, leading to cleaner, more robust, and more reliable software.
+**Most importantly:** Unit testing is not just about finding bugs. It is a practice that fundamentally improves code quality, design, and maintainability. Writing tests forces developers to think critically about their code, leading to cleaner, more robust, and more reliable software.
