@@ -698,31 +698,149 @@ While there's no hard rule, consider these guidelines:
 
 ### 🌐 Real-World Example: Small, Focused Functions Repository
 
-For a comprehensive real-world example demonstrating the principles of writing small, focused functions, refer to the [Writing-Small-Focused-Functions-Test](https://github.com/yjfvictor/Writing-Small-Focused-Functions-Test) repository. This repository showcases:
+For a concrete refactoring exercise demonstrating the principles of writing small, focused functions, refer to the [Writing-Small-Focused-Functions-Test](https://github.com/yjfvictor/Writing-Small-Focused-Functions-Test) repository. This repository was written and refactored entirely by me for the purpose of demonstrating the “before and after” impact of function decomposition. The repository contains the same script in two states: an intentionally monolithic “before” version, and a decomposed “after” version on a refactor branch.
 
-Before Modification (Commit 817fd185c0bfc4e3f81b721c34bb151e457939ba):
+#### Before: intentional anti-example (commit `8ca0c609247c1e8aa0d0cd509940825021e011d3` on `main`)
 
-1. **Too many responsibilities:** The `processOrder` function handles order validation, item processing, discount calculation, shipping calculation, tax calculation, payment processing, inventory updates, order creation, email sending, and response formatting, all in a single about 150-line function
-2. **Deep nesting:** Multiple levels of nested conditionals and loops make it hard to follow the logic flow
-3. **Hard to test:** Testing requires setting up complex order data, customer information, and payment details to test any single aspect of the process
-4. **Difficult to debug:** When something goes wrong, it is hard to identify which part of the logic failed (validation, calculation, payment, inventory, etc.)
-5. **Not reusable:** The logic is tightly coupled. You cannot reuse the discount calculation or shipping logic elsewhere
-6. **Poor readability:** The function reads like a long procedural script with many mixed concerns
-7. **Mixed abstraction levels:** High-level orchestration mixed with low-level implementation details (e.g., regex validation inline with business logic)
+In this commit, `main.js` is written to violate the principle on purpose:
 
-After Modification ([Pull Request #1](https://github.com/yjfvictor/Writing-Small-Focused-Functions-Test/pull/1), merged to commit 5f933cfd5b404bb87e0821a6f78fbedb40837188):
+1. **Too many responsibilities in one place:** The `run()` function performs argument checking, path resolution, file I/O, CSV parsing, validation, discount logic, aggregation, report formatting, and output writing, all in one long routine.
+2. **Mixed abstraction levels:** High-level orchestration (the overall “report job”) sits beside low-level details (string splitting, padding, numeric parsing).
+3. **Hard to test in isolation:** Most logic is coupled to filesystem reads/writes and console output, which makes unit testing awkward.
+4. **Difficult to modify safely:** Small changes (for example, changing discount rules or warning behaviour) require editing a large function and re-validating unrelated logic.
+5. **Reduced readability:** The code reads like a procedural script rather than a sequence of named steps.
 
-1. **Single responsibility:** Each function now has one clear purpose, that is, validation functions validate, calculation functions calculate, and processing functions process
-2. **Readable orchestration:** The main `processOrder` function reads like a clear workflow: validate → process items → calculate → apply discounts → process payment → update inventory → save order → send email
-3. **Easy to test:** Each function can be tested independently with simple inputs (e.g., test `calculateShippingCost()` with just a subtotal value)
-4. **Reusable components:** Functions like `calculateSubtotal()`, `applyDiscount()`, and `calculateTax()` can be used in other contexts (returns, partial orders, etc.)
-5. **No deep nesting:** Logic is flattened into small, focused functions that are easy to follow
-6. **Self-documenting:** Function names like `validateOrderData()`, `processOrderItems()`, and `buildOrderRecord()` explain what each piece does
-7. **Easier to modify:** Want to change tax calculation? Only modify `calculateTax()`. Need different shipping rules? Only modify `calculateShippingCost()`
-8. **Better error handling:** Errors can be traced to specific, small functions (e.g., "validation failed in `validateCustomerInfo()`")
-9. **Organised by concern:** Functions are grouped logically (validation, item processing, calculations, payment, inventory, etc.) making the codebase easier to navigate
+#### After: refactored into small, focused functions ([Pull Request #1](https://github.com/yjfvictor/Writing-Small-Focused-Functions-Test/pull/1) merged as commit `7bd824ae84110dcd22266e8e4dde3514a8b365d6`)
 
-Exploring this repository will provide additional context and help reinforce the function decomposition principles outlined above through real, working code examples.
+In this refactor, the behaviour is preserved, but the design is improved by extracting single-purpose helpers:
+
+1. **Single responsibility per function:** Parsing (`parseHeaderIndex()`, `parseOrderRow()`), business rules (`calculateDiscountRate()`), aggregation (`applyRowToAggregates()`), formatting (`formatReportLines()`), and output (`writeOutputs()`) are separated.
+2. **Readable orchestration:** `run()` becomes a clear workflow: validate inputs → load lines → validate header → process rows → format report → write outputs.
+3. **Improved testability:** Pure functions (for example, `calculateDiscountRate()` and `formatReportLines()`) can be tested with simple inputs, without needing the filesystem.
+4. **Easier maintenance:** Modifying one concern is localised (for example, changing discount rules is largely contained to `calculateDiscountRate()`).
+5. **Self-documenting structure:** The function names describe intent, reducing the need for explanatory comments.
+
+#### BEFORE and AFTER: the actual `run()` function that was refactored
+
+- **Before commit**: [`8ca0c609247c1e8aa0d0cd509940825021e011d3`](https://github.com/yjfvictor/Writing-Small-Focused-Functions-Test/commit/8ca0c609247c1e8aa0d0cd509940825021e011d3)
+- **After commit**: [`7bd824ae84110dcd22266e8e4dde3514a8b365d6`](https://github.com/yjfvictor/Writing-Small-Focused-Functions-Test/commit/7bd824ae84110dcd22266e8e4dde3514a8b365d6) (merged from [Pull Request #1](https://github.com/yjfvictor/Writing-Small-Focused-Functions-Test/pull/1))
+
+**BEFORE (`main.js`): one large function doing everything**
+
+```javascript
+/**
+ * @brief Runs an intentionally overgrown end-of-day sales report job.
+ *
+ * @param {string} csvPath Path to an input CSV file.
+ * @param {string} outDir Path to an output directory.
+ * @returns {number} Exit code (0 for success, 1 for failure).
+ */
+function run(csvPath, outDir) {
+  try {
+    if (!csvPath || !outDir) {
+      console.log("usage: node main.js <input.csv> <outDir>");
+      return 1;
+    }
+
+    // Path resolution + filesystem validation + directory creation
+    // CSV reading + parsing + validation
+    // Discount rules + aggregation
+    // Report formatting + writing report.txt + writing summary.json
+    // Progress logging + error handling
+    // (All in one long function.)
+
+    // ... long mixed-responsibility implementation ...
+    return 0;
+  } catch (e) {
+    console.log("failed: " + (e && e.message ? e.message : String(e)));
+    return 1;
+  }
+}
+```
+
+**AFTER (`main.js`): small helpers and a readable orchestration**
+
+```javascript
+/**
+ * @brief Runs an end-of-day sales report job.
+ *
+ * @param {string} csvPath Path to an input CSV file.
+ * @param {string} outDir Path to an output directory.
+ * @returns {number} Exit code (0 for success, 1 for failure).
+ */
+function run(csvPath, outDir) {
+  try {
+    if (!csvPath || !outDir) {
+      console.log(buildUsage());
+      return 1;
+    }
+
+    const absCsv = resolvePath(csvPath);
+    const absOut = resolvePath(outDir);
+    if (!fs.existsSync(absCsv)) {
+      console.log("input missing");
+      return 1;
+    }
+
+    ensureDirectory(absOut);
+
+    const lines = readNonEmptyLines(absCsv);
+    if (lines.length < 2) {
+      console.log("no data");
+      return 1;
+    }
+
+    const idx = parseHeaderIndex(lines[0]);
+    const required = ["orderId", "customerId", "customerName", "product", "units", "unitPrice", "region", "createdAt"];
+    const headerCheck = validateHeader(idx, required);
+    if (!headerCheck.ok) {
+      console.log("bad header: missing " + headerCheck.missing);
+      return 1;
+    }
+
+    const agg = createAggregates();
+    const expectedColumns = lines[0].split(",").length;
+
+    for (let k = 1; k < lines.length; k++) {
+      const parts = lines[k].split(",");
+      const row = parseOrderRow(parts, idx, k + 1, expectedColumns, agg.warnings);
+      if (!row) {
+        agg.badRows++;
+        continue;
+      }
+
+      const discountRate = calculateDiscountRate(row);
+      const lineGross = row.units * row.unitPrice;
+      const lineDiscount = lineGross * discountRate;
+      const lineNet = lineGross - lineDiscount;
+
+      applyRowToAggregates(agg, row, { lineGross, lineDiscount, lineNet });
+      maybeLogProgress(k);
+    }
+
+    const reportLines = formatReportLines(agg);
+    const outputs = writeOutputs(absOut, agg, reportLines);
+    console.log("done; wrote " + outputs.reportPath + " and " + outputs.jsonPath);
+    return 0;
+  } catch (e) {
+    console.log("failed: " + (e && e.message ? e.message : String(e)));
+    return 1;
+  }
+}
+```
+
+#### Brief reflection
+
+The most challenging part was identifying clean “seams” in the monolithic flow without changing behaviour, because the original function mixed pure transformations with side effects (filesystem and logging). I split out input/path handling, header parsing/validation, row parsing/sanitisation, discount calculation, aggregation, report formatting, and output writing into single-purpose helpers. This made `run()` read like a checklist of steps, and it made key logic (for example `calculateDiscountRate()` and `formatReportLines()`) much easier to unit test without needing the filesystem.
+
+#### Suggested exploration
+
+After cloning the repository, compare the two states:
+
+- Check out `8ca0c609247c1e8aa0d0cd509940825021e011d3` and read `main.js` as an example of “one function doing everything”.
+- Check out `7bd824ae84110dcd22266e8e4dde3514a8b365d6` (merged from [Pull Request #1](https://github.com/yjfvictor/Writing-Small-Focused-Functions-Test/pull/1)) and observe how the same behaviour is expressed through small, named steps.
+
+This contrast is intentionally small and focused, so you can see the refactor benefits without unrelated project noise.
 
 ---
 
