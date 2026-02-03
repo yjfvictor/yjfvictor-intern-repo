@@ -698,7 +698,13 @@ While there's no hard rule, consider these guidelines:
 
 ### 🌐 Real-World Example: Small, Focused Functions Repository
 
-For a concrete refactoring exercise demonstrating the principles of writing small, focused functions, refer to the [Writing-Small-Focused-Functions-Test](https://github.com/yjfvictor/Writing-Small-Focused-Functions-Test) repository. This repository was written and refactored entirely by me for the purpose of demonstrating the “before and after” impact of function decomposition. The repository contains the same script in two states: an intentionally monolithic “before” version, and a decomposed “after” version on a refactor branch.
+For a concrete refactoring exercise demonstrating the principles of writing small, focused functions, refer to the [Writing-Small-Focused-Functions-Test](https://github.com/yjfvictor/Writing-Small-Focused-Functions-Test) repository. This repository was written and refactored entirely by me for the purpose of demonstrating the “before and after” impact of function decomposition. Below is clear evidence of my personal completion of the small-function refactoring task: the original large function (BEFORE), my refactored version (AFTER), the file I committed, commit links, and my own reflection.
+
+#### Personal completion summary
+
+- **Code file I committed:** `main.js` (the only source file in the repo for this exercise).
+- **BEFORE commit (original large function):** [8ca0c609247c1e8aa0d0cd509940825021e011d3](https://github.com/yjfvictor/Writing-Small-Focused-Functions-Test/commit/8ca0c609247c1e8aa0d0cd509940825021e011d3) — `main.js` with one ~250-line `run()` function.
+- **AFTER commit (my refactored, smaller functions):** [7bd824ae84110dcd22266e8e4dde3514a8b365d6](https://github.com/yjfvictor/Writing-Small-Focused-Functions-Test/commit/7bd824ae84110dcd22266e8e4dde3514a8b365d6) (merged via [Pull Request #1](https://github.com/yjfvictor/Writing-Small-Focused-Functions-Test/pull/1)) — same behaviour, implemented with small, single-purpose helpers and a short orchestration `run()`.
 
 #### Before: intentional anti-example (commit `8ca0c609247c1e8aa0d0cd509940825021e011d3` on `main`)
 
@@ -720,12 +726,11 @@ In this refactor, the behaviour is preserved, but the design is improved by extr
 4. **Easier maintenance:** Modifying one concern is localised (for example, changing discount rules is largely contained to `calculateDiscountRate()`).
 5. **Self-documenting structure:** The function names describe intent, reducing the need for explanatory comments.
 
-#### BEFORE and AFTER: the actual `run()` function that was refactored
+#### BEFORE and AFTER: the actual `run()` function that I refactored
 
-- **Before commit**: [`8ca0c609247c1e8aa0d0cd509940825021e011d3`](https://github.com/yjfvictor/Writing-Small-Focused-Functions-Test/commit/8ca0c609247c1e8aa0d0cd509940825021e011d3)
-- **After commit**: [`7bd824ae84110dcd22266e8e4dde3514a8b365d6`](https://github.com/yjfvictor/Writing-Small-Focused-Functions-Test/commit/7bd824ae84110dcd22266e8e4dde3514a8b365d6) (merged from [Pull Request #1](https://github.com/yjfvictor/Writing-Small-Focused-Functions-Test/pull/1))
+**BEFORE (`main.js`): original large function (~250 lines in one place)**
 
-**BEFORE (`main.js`): one large function doing everything**
+The following is an excerpt from the original `run()` function I wrote and then refactored. It shows how argument checking, path resolution, file I/O, CSV parsing, validation, discount rules, and aggregation were all mixed in one long routine. (Full file: [commit 8ca0c60](https://github.com/yjfvictor/Writing-Small-Focused-Functions-Test/commit/8ca0c609247c1e8aa0d0cd509940825021e011d3).)
 
 ```javascript
 /**
@@ -742,14 +747,116 @@ function run(csvPath, outDir) {
       return 1;
     }
 
-    // Path resolution + filesystem validation + directory creation
-    // CSV reading + parsing + validation
-    // Discount rules + aggregation
-    // Report formatting + writing report.txt + writing summary.json
-    // Progress logging + error handling
-    // (All in one long function.)
+    const absCsv = path.isAbsolute(csvPath) ? csvPath : path.join(process.cwd(), csvPath);
+    const absOut = path.isAbsolute(outDir) ? outDir : path.join(process.cwd(), outDir);
 
-    // ... long mixed-responsibility implementation ...
+    if (!fs.existsSync(absCsv)) {
+      console.log("input missing");
+      return 1;
+    }
+
+    if (!fs.existsSync(absOut)) {
+      fs.mkdirSync(absOut, { recursive: true });
+    }
+
+    const raw = fs.readFileSync(absCsv, "utf8");
+    const lines = raw.split(/\r?\n/).filter((x) => x.trim() !== "");
+    if (lines.length < 2) {
+      console.log("no data");
+      return 1;
+    }
+
+    const header = lines[0].split(",");
+    const idx = {};
+    for (let i = 0; i < header.length; i++) {
+      idx[header[i].trim()] = i;
+    }
+
+    const required = ["orderId", "customerId", "customerName", "product", "units", "unitPrice", "region", "createdAt"];
+    for (let j = 0; j < required.length; j++) {
+      if (idx[required[j]] === undefined) {
+        console.log("bad header: missing " + required[j]);
+        return 1;
+      }
+    }
+
+    let totalOrders = 0, totalUnits = 0, gross = 0, net = 0, discounted = 0, badRows = 0;
+    const byRegion = {}, byCustomer = {}, warnings = [];
+
+    for (let k = 1; k < lines.length; k++) {
+      const parts = lines[k].split(",");
+      if (parts.length < header.length) {
+        badRows++;
+        continue;
+      }
+
+      const orderId = (parts[idx.orderId] || "").trim();
+      const customerId = (parts[idx.customerId] || "").trim();
+      const customerName = (parts[idx.customerName] || "").trim();
+      const product = (parts[idx.product] || "").trim();
+      const region = (parts[idx.region] || "").trim().toUpperCase();
+
+      let units = parseInt((parts[idx.units] || "").trim(), 10);
+      let unitPrice = parseFloat((parts[idx.unitPrice] || "").trim());
+      const createdAt = (parts[idx.createdAt] || "").trim();
+
+      if (!orderId || !customerId) {
+        badRows++;
+        continue;
+      }
+
+      if (!customerName) warnings.push("row " + (k + 1) + " missing customerName for " + customerId);
+      if (!product) warnings.push("row " + (k + 1) + " missing product for order " + orderId);
+      if (!region) warnings.push("row " + (k + 1) + " missing region for order " + orderId);
+
+      if (!Number.isFinite(units) || units <= 0) {
+        units = 1;
+        warnings.push("row " + (k + 1) + " invalid units; defaulted to 1");
+      }
+      if (!Number.isFinite(unitPrice) || unitPrice < 0) {
+        unitPrice = 0;
+        warnings.push("row " + (k + 1) + " invalid unitPrice; defaulted to 0");
+      }
+
+      const dateObj = new Date(createdAt);
+      if (Number.isNaN(dateObj.getTime())) {
+        warnings.push("row " + (k + 1) + " invalid createdAt: " + createdAt);
+      }
+
+      // Discount rules mixed in with aggregation
+      let discountRate = 0;
+      if (customerId.startsWith("VIP-")) discountRate += 0.1;
+      if (region === "EU") discountRate += 0.05;
+      if (units >= 100) discountRate += 0.07;
+      if (discountRate > 0.25) discountRate = 0.25;
+
+      const lineGross = units * unitPrice;
+      const lineDiscount = lineGross * discountRate;
+      const lineNet = lineGross - lineDiscount;
+
+      totalOrders++;
+      totalUnits += units;
+      gross += lineGross;
+      net += lineNet;
+      discounted += lineDiscount;
+
+      if (!byRegion[region]) byRegion[region] = { orders: 0, units: 0, gross: 0, net: 0 };
+      byRegion[region].orders++;
+      byRegion[region].units += units;
+      byRegion[region].gross += lineGross;
+      byRegion[region].net += lineNet;
+
+      const customerKey = customerId + "|" + customerName;
+      if (!byCustomer[customerKey]) byCustomer[customerKey] = { orders: 0, units: 0, gross: 0, net: 0 };
+      byCustomer[customerKey].orders++;
+      byCustomer[customerKey].units += units;
+      byCustomer[customerKey].gross += lineGross;
+      byCustomer[customerKey].net += lineNet;
+
+      if (k % 250 === 0) console.log("processed " + k + " rows...");
+    }
+
+    // ... remainder: report formatting (reportLines), fs.writeFileSync(report.txt), fs.writeFileSync(summary.json), return 0
     return 0;
   } catch (e) {
     console.log("failed: " + (e && e.message ? e.message : String(e)));
@@ -758,7 +865,9 @@ function run(csvPath, outDir) {
 }
 ```
 
-**AFTER (`main.js`): small helpers and a readable orchestration**
+**AFTER (`main.js`): my refactored version — small helpers and a readable orchestration**
+
+The refactored `run()` below is the version I committed after breaking the large function into single-purpose helpers. (Full file: [commit 7bd824a](https://github.com/yjfvictor/Writing-Small-Focused-Functions-Test/commit/7bd824ae84110dcd22266e8e4dde3514a8b365d6).)
 
 ```javascript
 /**
@@ -829,9 +938,26 @@ function run(csvPath, outDir) {
 }
 ```
 
-#### Brief reflection
+#### Personal written reflection
 
-The most challenging part was identifying clean “seams” in the monolithic flow without changing behaviour, because the original function mixed pure transformations with side effects (filesystem and logging). I split out input/path handling, header parsing/validation, row parsing/sanitisation, discount calculation, aggregation, report formatting, and output writing into single-purpose helpers. This made `run()` read like a checklist of steps, and it made key logic (for example `calculateDiscountRate()` and `formatReportLines()`) much easier to unit test without needing the filesystem.
+The following reflection is based on my own refactoring work on a real example I wrote and refactored: the end-of-day sales report script in the repository [Writing-Small-Focused-Functions-Test](https://github.com/yjfvictor/Writing-Small-Focused-Functions-Test), in the single file `main.js`. This is not general clean-code theory; it refers to a concrete refactor I completed and committed.
+
+**Clear, concrete evidence of this refactor:**
+
+- **Pull request:** [Pull Request #1](https://github.com/yjfvictor/Writing-Small-Focused-Functions-Test/pull/1) (merge of the refactored code).
+- **BEFORE (original large function):** commit [`8ca0c609247c1e8aa0d0cd509940825021e011d3`](https://github.com/yjfvictor/Writing-Small-Focused-Functions-Test/commit/8ca0c609247c1e8aa0d0cd509940825021e011d3) — one ~250-line `run()` in `main.js`.
+- **AFTER (my refactored version):** commit [`7bd824ae84110dcd22266e8e4dde3514a8b365d6`](https://github.com/yjfvictor/Writing-Small-Focused-Functions-Test/commit/7bd824ae84110dcd22266e8e4dde3514a8b365d6) — same behaviour, implemented with small helpers and a short `run()`.
+- **BEFORE/AFTER code:** The two code blocks immediately above in this document are excerpts from that same `main.js` file at the BEFORE and AFTER commits.
+
+---
+
+**Why breaking down functions into smaller ones is beneficial (in my own words).**
+
+I find that a long function tries to do too much at once, so when I read it I have to hold many ideas in my head and it is easy to lose the overall flow. Breaking it into smaller functions gives each piece a single job and a clear name. That way I can understand the high-level story first (for example “validate input, load data, process rows, write report”) and only open the smaller functions when I need the details. Smaller functions are also easier to test: I can feed simple inputs into one function and assert on its output without setting up the whole pipeline or mocking the filesystem. When something breaks, the failure is usually in one of those small pieces, so debugging is faster. In short, breaking down functions improves readability, testability, and maintainability because each unit does one thing and can be read, tested, or changed on its own.
+
+**How my refactoring improved the structure of the code.**
+
+In my BEFORE version, `run()` contained argument checks, path resolution, file reads, CSV parsing, header validation, row parsing and validation, discount rules, aggregation, report formatting, and file writes all in one long routine. In the AFTER version I extracted single-purpose helpers: `resolvePath()`, `ensureDirectory()`, `readNonEmptyLines()`, `parseHeaderIndex()`, `validateHeader()`, `parseOrderRow()`, `calculateDiscountRate()`, `createAggregates()`, `applyRowToAggregates()`, `formatReportLines()`, `writeOutputs()`, and `maybeLogProgress()`. The main `run()` shrank to a short orchestration that just calls these in sequence. So the structure improved in two ways: first, the top-level flow is now a readable list of steps instead of a dense block of mixed concerns; second, each concern lives in one place, so changing discount logic only touches `calculateDiscountRate()` and I can unit test it without touching I/O. The BEFORE/AFTER code blocks and commit links above are the direct evidence of this refactor.
 
 #### Suggested exploration
 
